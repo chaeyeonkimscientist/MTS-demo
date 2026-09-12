@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Consolidation — a note for MTS</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&display=swap');
+  :root{
+    --paper:#F4F1EA;--paper-2:#EDE9DE;--ink:#1A1712;--ink-soft:#4A453B;--muted:#8A8375;
+    --rule:#D8D2C4;--edge:#C9C2B2;--blue:#3B6FE0;--blue-soft:#5C86E8;--yellow:#F6D64A;--red:#D65A4A;
+    --ai:#5FA8C4;--neuro:#8FB8FF;--macro:#E8935B;--market:#B08FE8;
+    --leftW:46vw;--panelW:100vw;--topH:33px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);
+    font-family:'JetBrains Mono',ui-monospace,monospace;line-height:1.62;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+  .topbar{position:fixed;top:0;left:0;right:0;z-index:90;height:var(--topH);
+    background:linear-gradient(180deg,#15151b,#0f0f14);color:#B9C0CE;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 18px;font-size:12px;font-weight:500;border-bottom:1px solid #000}
+  .topbar .brand{display:flex;align-items:center;gap:8px;color:#E8E6E0}
+  .topbar .status{color:#8A93A6}.topbar .status .live{color:var(--red);font-weight:700}
+  .logo-dots{display:inline-flex;gap:3px;vertical-align:middle}
+  .logo-dots b{width:11px;height:11px;border-radius:50%;display:block}
+
+  /* RIGHT: canvas panel — its own full-bleed surface */
+  #canvasPanel{position:fixed;top:var(--topH);bottom:0;right:0;z-index:40;
+    width:var(--panelW);background:var(--paper);
+    background-image:radial-gradient(var(--edge) .7px, transparent .7px);background-size:15px 15px;
+    border-left:1px solid transparent;display:flex;flex-direction:column;
+    transition:width .08s linear;will-change:width}
+  #canvasPanel.full{width:100vw;border-left:none}
+  #canvasPanel.collapsed{width:0;border-left:none;overflow:hidden}
+  #cv{position:absolute;inset:0;width:100%;height:100%;touch-action:none;z-index:1}
+
+  .panel-head{position:relative;z-index:3;display:flex;align-items:center;gap:8px;
+    padding:10px 16px;background:rgba(237,233,222,.82);backdrop-filter:blur(4px);
+    border-bottom:1px solid var(--rule);font-size:12px;color:var(--muted)}
+  .lights{display:flex;gap:7px}
+  .lights i{width:11px;height:11px;border-radius:50%;display:block;cursor:pointer;position:relative;transition:transform .1s}
+  .lights i:hover{transform:scale(1.15)}
+  .lights .r{background:#E96A5E}.lights .y{background:#F1BE4F}.lights .g{background:#69C066}
+  .lights i::after{content:attr(data-h);position:absolute;top:20px;left:50%;transform:translateX(-50%);
+    font-size:9px;color:var(--muted);background:var(--paper);padding:1px 5px;border-radius:4px;border:1px solid var(--rule);
+    white-space:nowrap;opacity:0;pointer-events:none;transition:.12s;letter-spacing:.03em;z-index:9}
+  .lights i:hover::after{opacity:1}
+  .panel-head .agent{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--ink)}
+  .panel-head .agent .face{width:18px;height:18px;border-radius:50%;
+    background:radial-gradient(circle at 38% 34%,#fff,var(--neuro));border:1px solid var(--rule)}
+  .panel-head .sim{margin-left:auto;font-size:10.5px;letter-spacing:.12em}
+
+  .panel-foot{position:relative;z-index:3;margin-top:auto;
+    padding:10px 16px;background:rgba(237,233,222,.82);backdrop-filter:blur(4px);
+    border-top:1px solid var(--rule);font-size:11.5px;color:var(--muted);
+    display:flex;gap:8px;align-items:center}
+  .panel-foot .chip{background:var(--paper);border:1px solid var(--rule);border-radius:20px;padding:2px 9px;color:var(--ink-soft)}
+  .panel-foot .legend{display:flex;gap:9px;margin-left:auto}
+  .panel-foot .legend span{display:inline-flex;gap:5px;align-items:center}
+  .panel-foot .legend i{width:7px;height:7px;border-radius:50%}
+
+  #hero{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;
+    text-align:center;padding:0 6%;pointer-events:none}
+  #hero .veil{position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 50%,rgba(244,241,234,.92) 30%,rgba(244,241,234,.5) 70%,transparent 100%)}
+  #hero .inner{position:relative}
+  .eyebrow{font-size:12px;letter-spacing:.16em;color:var(--muted);margin-bottom:16px}
+  h1.title{font-family:'Fraunces',serif;font-weight:700;font-size:clamp(30px,4.4vw,52px);line-height:1.03;letter-spacing:-.02em}
+  h1.title .mark{background:linear-gradient(180deg,transparent 60%,var(--yellow) 60% 92%,transparent 92%);padding:0 6px}
+  .hero-sub{font-family:'Fraunces',serif;font-size:clamp(15px,1.9vw,19px);color:var(--ink-soft);margin-top:16px}
+
+  .assistant{position:absolute;left:16px;bottom:56px;z-index:6;display:flex;gap:8px;align-items:flex-start;
+    background:rgba(251,249,243,.95);backdrop-filter:blur(3px);border:1px solid var(--rule);border-radius:10px;
+    padding:8px 22px 8px 10px;max-width:250px;box-shadow:0 6px 18px rgba(0,0,0,.10);opacity:0;transition:opacity .5s}
+  .assistant.on{opacity:1}.assistant.hidden{display:none}
+  .assistant .a-face{width:16px;height:16px;border-radius:50%;flex:none;margin-top:1px;
+    background:radial-gradient(circle at 38% 34%,#fff,var(--macro));border:1px solid var(--rule)}
+  .assistant .a-x{position:absolute;top:5px;right:8px;font-size:13px;line-height:1;color:var(--muted);cursor:pointer}
+  .assistant .a-x:hover{color:var(--ink)}
+  .a-name{font-size:9px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+  .a-text{font-size:11.5px;color:var(--ink);line-height:1.4;display:block;margin-top:2px}.a-text b{color:var(--blue)}
+  .a-pip{position:absolute;left:16px;bottom:56px;z-index:6;width:26px;height:26px;border-radius:50%;
+    background:radial-gradient(circle at 38% 34%,#fff,var(--macro));border:1px solid var(--rule);cursor:pointer;display:none;
+    box-shadow:0 4px 12px rgba(0,0,0,.12)}
+  .a-pip.on{display:block}
+
+  .tip{position:fixed;pointer-events:none;z-index:95;background:#1A1712;color:#F4F1EA;border-radius:7px;
+    padding:7px 10px;font-size:11.5px;line-height:1.45;max-width:240px;box-shadow:0 6px 18px rgba(0,0,0,.35);
+    opacity:0;transform:translateY(3px);transition:.12s}
+  .tip.on{opacity:1;transform:none}.tip b{color:var(--yellow)}
+
+  /* EDGE INTELLIGENCE — the relationship carries the update */
+  .edge-card{position:fixed;z-index:97;width:min(360px,calc(100vw - 28px));
+    background:rgba(251,249,243,.98);border:1px solid var(--ink);border-radius:11px;
+    padding:14px 15px 13px;box-shadow:0 14px 36px rgba(0,0,0,.18);
+    opacity:0;transform:translateY(5px) scale(.985);pointer-events:none;
+    transition:opacity .14s ease,transform .14s ease}
+  .edge-card.on{opacity:1;transform:none;pointer-events:auto}
+  .ec-close{position:absolute;right:9px;top:7px;border:0;background:transparent;color:var(--muted);
+    font:500 17px/1 'JetBrains Mono',monospace;cursor:pointer;padding:3px 5px}
+  .ec-close:hover{color:var(--ink)}
+  .ec-meta{display:flex;align-items:center;gap:8px;padding-right:24px;margin-bottom:7px;
+    font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+  .ec-status{display:inline-flex;align-items:center;gap:5px;color:var(--blue);font-weight:700}
+  .ec-status::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--yellow);box-shadow:0 0 0 3px rgba(246,214,74,.18)}
+  .ec-pair{font-size:10px;color:var(--muted);margin-bottom:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ec-pair b{color:var(--ink);font-weight:700}
+  .ec-headline{font-family:'Fraunces',serif;font-size:19px;line-height:1.14;letter-spacing:-.01em;margin:0 0 8px}
+  .ec-summary{font-size:11.5px;line-height:1.5;color:var(--ink-soft);margin:0 0 10px}
+  .ec-why{background:var(--paper-2);border:1px solid var(--rule);border-radius:7px;padding:8px 9px;margin-bottom:10px}
+  .ec-why b{display:block;color:var(--blue);font-size:9px;letter-spacing:.09em;text-transform:uppercase;margin-bottom:3px}
+  .ec-why span{display:block;font-size:11px;line-height:1.43;color:var(--ink)}
+  .ec-actions{display:flex;align-items:center;gap:9px}
+  .ec-follow{appearance:none;border:1px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:6px;
+    padding:7px 9px;font:700 10.5px/1 'JetBrains Mono',monospace;cursor:pointer}
+  .ec-follow:hover{background:var(--blue);border-color:var(--blue)}
+  .ec-source{font-size:10px!important;color:var(--blue)!important;border-bottom:1px dashed var(--blue-soft)!important;white-space:nowrap}
+  .ec-source.hidden{display:none}
+
+  /* THREAD VIEW — a selected relationship becomes a structured story */
+  #threadView{position:absolute;z-index:8;left:0;right:0;top:39px;bottom:43px;
+    background:var(--paper);background-image:radial-gradient(var(--edge) .65px,transparent .65px);background-size:15px 15px;
+    overflow:auto;opacity:0;visibility:hidden;pointer-events:none;transform:translateY(8px);
+    transition:opacity .2s ease,transform .2s ease,visibility 0s linear .2s}
+  #threadView.on{opacity:1;visibility:visible;pointer-events:auto;transform:none;transition-delay:0s}
+  .thread-toolbar{position:sticky;top:0;z-index:2;height:42px;display:flex;align-items:center;justify-content:space-between;
+    padding:0 15px;background:rgba(237,233,222,.91);backdrop-filter:blur(5px);border-bottom:1px solid var(--rule)}
+  .thread-back{appearance:none;border:1px solid var(--rule);background:var(--paper);border-radius:6px;color:var(--ink);
+    padding:5px 8px;font:700 10.5px/1 'JetBrains Mono',monospace;cursor:pointer}
+  .thread-back:hover{border-color:var(--blue);color:var(--blue)}
+  .thread-mode{font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+  .thread-inner{max-width:610px;margin:0 auto;padding:28px 34px 48px}
+  .thread-eyebrow{font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--blue);margin-bottom:7px}
+  .thread-pair{font-size:11px;color:var(--muted);margin-bottom:9px}
+  .thread-pair b{color:var(--ink)}
+  .thread-title{font-family:'Fraunces',serif;font-size:clamp(24px,3vw,35px);line-height:1.04;letter-spacing:-.02em;margin-bottom:10px}
+  .thread-dek{font-family:'Fraunces',serif;font-size:15px;line-height:1.42;color:var(--ink-soft);margin-bottom:26px}
+  .thread-source-row{display:flex;gap:7px;flex-wrap:wrap;margin:-12px 0 24px}
+  .thread-source-row a{font-size:9.5px;background:var(--paper);border:1px solid var(--rule);border-radius:20px;padding:3px 8px;color:var(--ink-soft);text-decoration:none}
+  .thread-source-row a:hover{border-color:var(--blue);color:var(--blue)}
+  .pipeline{position:relative;margin:2px 0 26px}
+  .pipeline::before{content:"";position:absolute;left:14px;top:12px;bottom:20px;width:1px;background:linear-gradient(var(--blue),var(--rule))}
+  .thread-step{position:relative;display:grid;grid-template-columns:30px 1fr;gap:12px;margin-bottom:14px}
+  .step-dot{position:relative;z-index:1;width:10px;height:10px;border-radius:50%;margin:11px 0 0 9px;background:var(--paper);border:2px solid var(--blue);box-shadow:0 0 0 4px rgba(244,241,234,.95)}
+  .thread-step:last-child .step-dot{border-color:var(--yellow);background:var(--yellow)}
+  .step-card{background:rgba(251,249,243,.95);border:1px solid var(--rule);border-radius:8px;padding:10px 12px}
+  .step-kicker{font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--blue);font-weight:700;margin-bottom:2px}
+  .step-title{font-family:'Fraunces',serif;font-size:17px;line-height:1.2;color:var(--ink);margin-bottom:4px}
+  .step-body{font-size:11.5px;line-height:1.48;color:var(--ink-soft)}
+  .thread-watch{border-left:3px solid var(--yellow);padding:9px 11px;background:rgba(251,249,243,.82)}
+  .thread-watch b{display:block;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8A6D12;margin-bottom:3px}
+  .thread-watch span{font-family:'Fraunces',serif;font-size:14px;line-height:1.4;color:var(--ink)}
+
+  #divider{position:fixed;top:var(--topH);bottom:0;z-index:60;width:14px;
+    left:calc(var(--leftW) - 7px);cursor:col-resize;display:none;align-items:center;justify-content:center}
+  #divider.on{display:flex}
+  #divider::before{content:"";width:3px;height:46px;border-radius:3px;background:var(--edge);transition:background .15s}
+  #divider:hover::before,#divider.drag::before{background:var(--blue)}
+  #reopen{position:fixed;top:var(--topH);right:0;bottom:0;z-index:60;width:34px;background:var(--paper-2);
+    border-left:1px solid var(--ink);display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer}
+  #reopen.on{display:flex}
+  #reopen span{writing-mode:vertical-rl;font-size:11px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+  #reopen .dotc{width:8px;height:8px;border-radius:50%;background:var(--blue)}
+
+  /* LEFT: reading column */
+  #reader{position:relative;z-index:30;width:var(--leftW);
+    padding:calc(var(--topH) + 5vh) 4vw 16vh 5vw}
+  #cineSpace{height:150vh}
+  .lead{font-family:'Fraunces',serif;font-size:clamp(18px,2.1vw,23px);line-height:1.42;margin-bottom:60px}
+  .lead b{background:linear-gradient(180deg,transparent 62%,#FBE9A0 62% 92%,transparent 92%)}
+  .section{margin-bottom:20vh}.section:last-of-type{margin-bottom:10vh}
+  .tag{font-size:12px;letter-spacing:.1em;color:var(--blue);font-weight:700;margin-bottom:6px}
+  .tag .n{color:var(--muted);margin-right:8px}
+  .hr{height:1px;background:var(--rule);margin:8px 0 18px}
+  h2{font-family:'Fraunces',serif;font-size:26px;font-weight:600;letter-spacing:-.01em;margin-bottom:12px}
+  h3{font-family:'Fraunces',serif;font-size:20px;font-weight:600;margin:22px 0 8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  h3 .num{color:var(--blue)}
+  p{font-size:14.5px;color:var(--ink-soft);margin-bottom:14px}
+  p strong{color:var(--ink)}
+  a{color:var(--blue);border-bottom:1px dashed var(--blue-soft);text-decoration:none}
+  .callout{border-left:3px solid var(--blue);padding-left:16px;margin:16px 0}.callout p{color:var(--ink);margin:0}
+  ul.spec{list-style:none;padding:14px 16px;margin:12px 0;background:var(--paper-2);border:1px solid var(--rule);border-radius:8px}
+  ul.spec li{font-size:13px;color:var(--ink-soft);margin-bottom:7px}ul.spec li:last-child{margin-bottom:0}ul.spec b{color:var(--ink)}
+  .why{margin-top:12px;padding-top:12px;border-top:1px dashed var(--rule);font-size:13.5px}.why b{color:var(--blue)}
+  .proof{list-style:none;padding:0;margin:14px 0}
+  .proof li{font-size:13px;color:var(--ink-soft);padding:9px 12px;margin-bottom:7px;background:var(--paper-2);border:1px solid var(--rule);border-radius:7px}
+  .proof b{color:var(--ink)}
+  .foot{color:var(--muted);font-size:12.5px;margin-top:8px}
+
+  /* Keep reading copy compositor-friendly while scrolling.
+     Blur filters can flicker/disappear during active scroll in Chromium/WebKit. */
+  .focusable{opacity:.72;transform:translateY(6px);
+    transition:opacity .32s ease,transform .32s ease;will-change:opacity,transform}
+  .focusable.sharp{opacity:1;transform:none}
+
+  .kw{position:relative;display:inline-block;cursor:pointer;font-weight:700;color:var(--ink);
+    background:linear-gradient(180deg,transparent 52%,var(--yellow) 52% 96%,transparent 96%);
+    padding:1px 6px;border-radius:4px;border:1px solid #E0BE3A;animation:kwblink 1.4s ease-in-out infinite}
+  .kw::after{content:"+node";font-size:9px;font-weight:700;letter-spacing:.04em;color:#8A6D12;
+    background:rgba(255,255,255,.6);border:1px solid #E0BE3A;border-radius:3px;padding:0 3px;margin-left:5px;vertical-align:1px}
+  @keyframes kwblink{0%,100%{box-shadow:0 0 0 0 rgba(246,214,74,0);border-color:#E0BE3A}50%{box-shadow:0 0 0 4px rgba(246,214,74,.4);border-color:#C99A1E}}
+  .kw:hover{box-shadow:0 0 0 5px rgba(246,214,74,.75)!important;animation:none;transform:translateY(-1px)}
+  .kw .kwtip{position:absolute;bottom:calc(100% + 9px);left:50%;transform:translateX(-50%);background:#1A1712;color:#F4F1EA;
+    font-weight:400;font-size:11px;white-space:nowrap;padding:5px 9px;border-radius:6px;opacity:0;pointer-events:none;transition:.12s;z-index:60}
+  .kw .kwtip::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1A1712}
+  .kw:hover .kwtip{opacity:1}
+  .kw.used{animation:none;color:var(--muted);background:none;border-color:transparent;cursor:default;box-shadow:none;text-decoration:line-through;font-weight:500}
+  .kw.used::after{display:none}.kw.used .kwtip{display:none}
+  .fly{position:fixed;z-index:96;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;
+    background:#FBF9F3;border:1px solid var(--ink);border-radius:7px;padding:4px 10px;pointer-events:none;box-shadow:0 8px 20px rgba(0,0,0,.2)}
+
+  @media (max-width:820px){
+    :root{--leftW:100vw}
+    #canvasPanel{width:100vw;height:44vh;top:auto;bottom:0;border-left:none;border-top:1px solid var(--ink)}
+    #canvasPanel.full{height:calc(100vh - var(--topH));top:var(--topH)}
+    #reader{width:100vw;padding-bottom:48vh}
+    #divider,#reopen{display:none!important}
+    #cineSpace{height:60vh}
+    .edge-card{width:min(340px,calc(100vw - 20px))}
+    #threadView{top:39px;bottom:43px}
+    .thread-inner{padding:22px 20px 42px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{scroll-behavior:auto}.focusable{filter:none;opacity:1;transform:none}.kw{animation:none}
+  }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <span class="brand"><span class="logo-dots"><b style="background:var(--yellow)"></b><b style="background:var(--macro)"></b><b style="background:var(--neuro)"></b></span> MTS Browser</span>
+    <span class="status">monitoring the situation · <span class="live">a note from Chaeyeon</span></span>
+  </div>
+
+  <div id="canvasPanel">
+    <div class="panel-head" id="pHead">
+      <span class="lights"><i class="r" id="btnRed" data-h="collapse"></i><i class="y" id="btnYel" data-h="reset"></i><i class="g" id="btnGrn" data-h="fullscreen"></i></span>
+      <span class="agent"><span class="face"></span> node-canvas</span>
+      <span class="sim" id="panelModeLabel">LIVE DEMO</span>
+    </div>
+    <canvas id="cv"></canvas>
+
+    <div id="threadView" aria-hidden="true">
+      <div class="thread-toolbar">
+        <button class="thread-back" id="threadBack" type="button">← back to graph</button>
+        <span class="thread-mode">relationship → story</span>
+      </div>
+      <div class="thread-inner">
+        <p class="thread-eyebrow" id="threadEyebrow">MTS SYNTHESIS</p>
+        <p class="thread-pair" id="threadPair"></p>
+        <h3 class="thread-title" id="threadTitle"></h3>
+        <p class="thread-dek" id="threadDek"></p>
+        <div class="thread-source-row" id="threadSources"></div>
+        <div class="pipeline" id="threadPipeline"></div>
+        <div class="thread-watch"><b>Watch next</b><span id="threadWatch"></span></div>
+      </div>
+    </div>
+
+    <div class="edge-card" id="edgeCard" role="dialog" aria-live="polite" aria-hidden="true">
+      <button class="ec-close" id="edgeClose" type="button" aria-label="Close connection update">×</button>
+      <div class="ec-meta"><span class="ec-status" id="edgeStatus">CONNECTION</span><span id="edgeDate"></span></div>
+      <div class="ec-pair" id="edgePair"></div>
+      <h4 class="ec-headline" id="edgeHeadline"></h4>
+      <p class="ec-summary" id="edgeSummary"></p>
+      <div class="ec-why"><b>Why this connection</b><span id="edgeWhy"></span></div>
+      <div class="ec-actions">
+        <button class="ec-follow" id="followThread" type="button">Follow the thread →</button>
+        <a class="ec-source hidden" id="edgeSource" target="_blank" rel="noopener noreferrer">source ↗</a>
+      </div>
+    </div>
+
+    <div id="hero"><div class="veil"></div>
+      <div class="inner">
+        <p class="eyebrow">A NOTE ON WHERE I'D BUILD FOR MTS</p>
+        <h1 class="title">The information <br><span class="mark">already arrives.</span></h1>
+        <p class="hero-sub">The job is making it stick. Scroll — watch the noise line up.</p>
+      </div>
+    </div>
+    <div class="assistant" id="assistant"><span class="a-x" id="aClose">×</span><span class="a-face"></span>
+      <div><span class="a-name">canvas assistant</span><span id="a-text" class="a-text">warming up…</span></div>
+    </div>
+    <div class="a-pip" id="aPip" title="assistant"></div>
+    <div class="panel-foot" id="pFoot">
+      <span class="chip">story = node</span><span class="chip">connection = the product</span>
+      <span class="legend">
+        <span><i style="background:var(--ai)"></i>ai</span>
+        <span><i style="background:var(--neuro)"></i>neuro</span>
+        <span><i style="background:var(--macro)"></i>macro</span>
+        <span><i style="background:var(--market)"></i>market</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="tip" id="tip"></div>
+  <div id="divider"></div>
+  <div id="reopen"><span class="dotc"></span><span>open canvas</span></div>
+
+  <main id="reader">
+    <div id="cineSpace"></div>
+
+    <p class="lead focusable">Hi Brent! You said you want to grow MTS on two sides — <b>incubate shows across new verticals</b>, and <b>build an artifact people can actually use</b>. I think they're one system. Read on the left; the graph lives on the right. The highlighted words are live — click one to drop it in.</p>
+
+    <section class="section"><div class="focusable">
+      <p class="tag"><span class="n">00</span>THE PREMISE</p><div class="hr"></div>
+      <h2>A memory problem, not a coverage problem</h2>
+      <p>Reading the coverage &amp; critic articles, most feedback treats MTS as a distribution problem: reach, speed, virality. Coming from cognitive science and content distribution, I think that's a misdiagnosis. MTS relies on X, which already delivers information faster than any show — but X, by design, doesn't prioritise consolidation, so it never converts into understanding you keep.</p>
+      <div class="callout"><p>Sensemaking, while MTS is on X, is a <strong>salience</strong> problem — not a distribution one.</p></div>
+    </div></section>
+
+    <section class="section"><div class="focusable">
+      <p class="tag"><span class="n">01</span>MEDIA GROWTH</p><div class="hr"></div>
+      <h2>Two verticals worth owning</h2>
+      <p>Before owning AI, crypto, or geopolitics, you'd prioritize 1–2 realms. I looked for real-time firehoses people are emotionally invested in and can't parse alone. Two stand out — and they're live keywords, so drop them into the graph:</p>
+      <h3><span class="num">01.</span> <span class="kw" data-kw="Neurotech" data-cat="neuro">Neurotech<span class="kwtip">click me to add me as a node →</span></span></h3>
+      <p>Where AI was three years ago — accelerating, emotionally charged, barely covered by anyone who can read the science well enough to separate breakthrough from hype. I'm a neuro-nerd, but that's not why I pitch it; it's why MTS could own the vertical before it's contested.</p>
+      <ul class="spec">
+        <li><b>Format:</b> Weekly anchor + live coverage on launch / funding / regulation days</li>
+        <li><b>Book:</b> Neuralink / Merge / Precision founders, neuroethicists, FDA-watchers, skeptics — academics who'll call out the BS</li>
+        <li><b>Firehose?</b> Yes, and accelerating, with a built-in ethics fault line</li>
+      </ul>
+      <div class="why"><p><b>On credibility:</b> this should counter MTS's current tech panel — critique in real time, which most channels are scared to do.</p></div>
+      <h3><span class="num">02.</span> <span class="kw" data-kw="Prediction markets" data-cat="market">Predictions<span class="kwtip">click me to add me as a node →</span></span></h3>
+      <p>Most channels compete with prediction markets; MTS should interrogate them. Why is this market priced this way? What does the crowd know that the headlines don't? Your audience already trusts a Polymarket price over a pundit — so make the market the protagonist and add the reasoning behind the move.</p>
+      <ul class="spec">
+        <li><b>Format:</b> Daily/rapid segment tied to live Kalshi &amp; Polymarket movement</li>
+        <li><b>Book:</b> The traders moving the line, the analysts, the investors</li>
+        <li><b>Firehose?</b> Yes — markets move continuously and are real-time friendly</li>
+      </ul>
+    </div></section>
+
+    <section class="section"><div class="focusable">
+      <p class="tag"><span class="n">02</span>PRODUCT GROWTH</p><div class="hr"></div>
+      <h2>A Bloomberg for meaning, not just data</h2>
+      <p>When you asked which company I think is cool, I named <a href="#">Flora</a>. When I asked what product growth looks like, you described a Bloomberg-esque tool that lets people build meaning from what they gather. So borrow Flora's node-canvas and point it at news: every story becomes a node, and the connections are the product.</p>
+      <p><strong>Why?</strong> Memory consolidates through connection — the act of linking two things is what retains them. That makes a node-graph the right cognitive architecture for sensemaking. Flora never made that argument; it's time distribution does.</p>
+      <p><strong>It also solves the empty-canvas trap.</strong> The show does the first pass — hosts publish each day's stories with connections drawn. The user forks it, extends the threads they care about, and builds a view over time, with a light AI layer suggesting links. Try more live keywords: <span class="kw" data-kw="Robotics" data-cat="ai">Robotics<span class="kwtip">click me to add me as a node →</span></span>, <span class="kw" data-kw="Stablecoins" data-cat="market">Stablecoins<span class="kwtip">click me to add me as a node →</span></span>, <span class="kw" data-kw="Fusion" data-cat="macro">Fusion<span class="kwtip">click me to add me as a node →</span></span>.</p>
+      <div class="callout"><p>The graph on the right is <strong>EP 83 as a graph</strong> — the thing you keep after the noise resolves. Hover a node, drag it, click any two to link. Then <strong>hover the edge</strong>: the connection carries the update. Open <strong>Follow the thread</strong> to turn that relationship into a structured story.</p></div>
+    </div></section>
+
+    <section class="section"><div class="focusable">
+      <p class="tag"><span class="n">03</span>WHY ME</p><div class="hr"></div>
+      <h2>Where I'd plug in</h2>
+      <p>The seam between producing shows and building the product — producer + engineer. Shows generate the graph; the graph makes the show durable and personal. What you cover determines what the product can connect; how people use the product tells you what to cover next.</p>
+      <ul class="proof">
+        <li><b>Brain-to-Film</b> — EEG signal → real-time scored film; built the pipeline in Python + benchmarked 4 gen-video models</li>
+        <li><b>Paramount</b> — shipped an AI agent that cut research 65%, adopted across distribution</li>
+        <li><b>NTT</b> — product definition 0→1 for a generative-AI app</li>
+      </ul>
+      <p><a href="#">Resume</a> &nbsp;·&nbsp; <a href="#">Portfolio</a></p>
+      <p>Happy to go deeper whenever. If useful, I'll build a working slice of the canvas so you can click it — this is a start.</p>
+      <p class="foot">Chaeyeon Kim · a note for MTS, not a formal proposal — just where I'd start. The fun part is pressure-testing it with you.</p>
+    </div></section>
+  </main>
+
+<script>
+(function(){
+  const panel=document.getElementById('canvasPanel'), cv=document.getElementById('cv'), ctx=cv.getContext('2d');
+  const tip=document.getElementById('tip'), aText=document.getElementById('a-text');
+  const hero=document.getElementById('hero'), pHead=document.getElementById('pHead'), pFoot=document.getElementById('pFoot'), assistant=document.getElementById('assistant');
+  const divider=document.getElementById('divider'), reopen=document.getElementById('reopen'), aPip=document.getElementById('aPip');
+  const cineSpace=document.getElementById('cineSpace');
+  const edgeCard=document.getElementById('edgeCard'), edgeClose=document.getElementById('edgeClose'), followThread=document.getElementById('followThread');
+  const edgeStatus=document.getElementById('edgeStatus'), edgeDate=document.getElementById('edgeDate'), edgePair=document.getElementById('edgePair');
+  const edgeHeadline=document.getElementById('edgeHeadline'), edgeSummary=document.getElementById('edgeSummary'), edgeWhy=document.getElementById('edgeWhy'), edgeSource=document.getElementById('edgeSource');
+  const threadView=document.getElementById('threadView'), threadBack=document.getElementById('threadBack'), panelModeLabel=document.getElementById('panelModeLabel');
+  const threadEyebrow=document.getElementById('threadEyebrow'), threadPair=document.getElementById('threadPair'), threadTitle=document.getElementById('threadTitle');
+  const threadDek=document.getElementById('threadDek'), threadSources=document.getElementById('threadSources'), threadPipeline=document.getElementById('threadPipeline'), threadWatch=document.getElementById('threadWatch');
+  const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const mobile=()=>matchMedia('(max-width:820px)').matches;
+  let W,H,DPR;
+  let leftFrac=0.46, panelMode='split', assistantDismissed=false;
+  const MINL=0.28, MAXL=0.68;
+
+  const base=[
+    {label:"Semiconductor export controls",cat:"macro",tip:"<b>Asianometry (Jon Y), EP 83.</b> China's tech industry, export controls, industrial policy."},
+    {label:"Physical AI · 4D sim",cat:"ai",tip:"<b>Benedikt Jenik, EP 83.</b> Scaling AI with physical understanding — 4D physics simulation."},
+    {label:"Agent swarms",cat:"ai",tip:"<b>Herbie Bradley, EP 83.</b> Agent swarms, continual learning, von Neumann probes."},
+    {label:"Machine Age Fund",cat:"market",tip:"<b>Jen Kha (a16z), EP 83.</b> AI-infrastructure investing and venture strategy."},
+    {label:"AI in healthcare",cat:"neuro",tip:"<b>Julie Yoo (a16z), EP 83.</b> AI in healthcare, health-tech investing, consumer access."},
+    {label:"Housing · urbanism",cat:"macro",tip:"<b>Ben Southwood, EP 83.</b> Works in Progress editor — building, cities, growth policy."},
+  ];
+  const cats={ai:'#5FA8C4',neuro:'#8FB8FF',macro:'#E8935B',market:'#B08FE8'};
+  const settled=[[.24,.20],[.74,.30],[.30,.52],[.78,.62],[.26,.80],[.66,.86]];
+  const pts=base.map((n,i)=>({...n,
+    sx:0.1+Math.random()*0.8, sy:0.12+Math.random()*0.76,
+    lx:settled[i][0], ly:settled[i][1],
+    px:0,py:0,tx:0,ty:0,rHit:20,dragged:false}));
+  let edges=[[0,3],[1,2]];
+  let dragging=-1,selected=-1,hover=-1,dragMoved=false,dx0=0,dy0=0;
+  let edgeHover=-1,edgePinned=-1,edgeHideTimer=0,threadEdge=-1;
+
+  // Prototype relationship intelligence. Curated examples are explicit about what
+  // is a sourced update vs. an MTS synthesis; all other user-made edges fall back
+  // to a connection hypothesis rather than inventing a headline.
+  const edgeIntel={
+    "Agent swarms||Physical AI · 4D sim":{
+      status:"MTS SYNTHESIS",date:"EP 83 thread",fresh:true,
+      headline:"World-models become more useful when agents can coordinate inside them",
+      summary:"The 4D-simulation and agent-swarm conversations point at the same operating layer: many agents learning, negotiating and acting inside a model of the physical world before deployment.",
+      why:"Simulation gives agents a world to reason inside; swarms turn that world into a coordination problem. Together they describe a training loop for physical AI, not two isolated AI stories.",
+      sources:[],
+      steps:[
+        {k:"WORLD MODEL",t:"Give software a manipulable physical environment",b:"4D simulation turns scenes into stateful environments rather than static media."},
+        {k:"MULTI-AGENT",t:"Put more than one reasoner inside the environment",b:"Agent swarms introduce delegation, negotiation and collective search."},
+        {k:"TRAINING LOOP",t:"Let coordination produce behavior before reality",b:"The shared layer is rehearsal: policies can be tested against other agents and a changing world."},
+        {k:"DEPLOYMENT",t:"Move successful behavior into embodied systems",b:"The implication is a bridge from simulated coordination to robots, autonomous systems and other physical agents."}
+      ],
+      watch:"Watch for teams combining world-model simulation with multi-agent policy training; that is where this connection becomes a product category."
+    },
+    "Machine Age Fund||Semiconductor export controls":{
+      status:"MTS SYNTHESIS",date:"EP 83 thread",fresh:true,
+      headline:"Policy chokepoints are becoming an investment map for AI infrastructure",
+      summary:"Export controls do more than constrain supply. They redirect demand, domestic substitution and capital toward the parts of the compute stack that suddenly become scarce or strategically important.",
+      why:"The policy story and the fund story meet at bottlenecks: a regulatory constraint can create the next infrastructure thesis before it shows up as a company category.",
+      sources:[],
+      steps:[
+        {k:"POLICY",t:"A rule changes what can move across borders",b:"Export controls create a hard constraint around advanced compute and semiconductor tooling."},
+        {k:"BOTTLENECK",t:"The constraint exposes strategic dependencies",b:"Memory, packaging, lithography, networking and domestic alternatives become more valuable when supply is restricted."},
+        {k:"CAPITAL",t:"Investors re-price the infrastructure layer",b:"Funds can treat the policy map as an early signal for where scarcity, substitution and new suppliers will emerge."},
+        {k:"MARKET",t:"The regulation becomes a company-building thesis",b:"What begins as geopolitics can end as a durable AI-infrastructure category."}
+      ],
+      watch:"Watch new export-rule updates alongside funding and public-market moves in the affected semiconductor layers."
+    },
+    "Neurotech||Robotics":{
+      status:"RECENT UPDATE",date:"Jul 17, 2026",fresh:true,
+      headline:"Brain-to-robot control is starting to look like a training-data layer for physical AI",
+      summary:"At WAIC 2026, BrainCo demonstrated non-invasive EEG control of a robotic arm and explicitly framed brain-to-robot interaction as a way to address the robotics industry's shortage of high-quality training data.",
+      why:"Neurotech stops being only an assistive interface. Human neural intent can become labeled control data for robots — linking BCI progress directly to how embodied AI learns.",
+      source:"BrainCo · WAIC 2026",
+      href:"https://www.prnewswire.com/news-releases/brainco-debuts-worlds-first-integrated-brain-to-robot-ai-rd-platform-at-waic-2026-302828515.html",
+      sources:[
+        {label:"BrainCo · WAIC 2026",href:"https://www.prnewswire.com/news-releases/brainco-debuts-worlds-first-integrated-brain-to-robot-ai-rd-platform-at-waic-2026-302828515.html"},
+        {label:"Nature Communications · Jul 2026",href:"https://www.nature.com/articles/s41467-026-75213-3"}
+      ],
+      steps:[
+        {k:"SIGNAL",t:"Neural intent becomes a robot-control input",b:"BCI systems are decoding user intent into commands that can move robotic effectors."},
+        {k:"BEHAVIOR TRACE",t:"Human control creates paired intent + motion data",b:"Each controlled action can pair a human goal with the robot trajectory that fulfilled it."},
+        {k:"TRAINING",t:"Those traces can become supervision for embodied AI",b:"BrainCo's demo explicitly connects the interface to robotics' need for higher-quality training data."},
+        {k:"GOVERNANCE",t:"The next issue is who owns the signal",b:"If neural intent becomes training data, consent, ownership and the boundary between assistance and autonomy become product questions too."}
+      ],
+      watch:"Watch for BCI companies partnering with humanoid or teleoperation teams — especially when neural-control data is reused to train autonomous policies."
+    }
+  };
+
+  function resize(){
+    const nextDPR=Math.min(devicePixelRatio||1,2);
+    const r=cv.getBoundingClientRect();
+    const nextW=Math.max(1,r.width), nextH=Math.max(1,r.height);
+    const pixelW=Math.max(1,Math.round(nextW*nextDPR));
+    const pixelH=Math.max(1,Math.round(nextH*nextDPR));
+
+    W=nextW;H=nextH;DPR=nextDPR;
+    // Changing canvas.width/height clears the bitmap. Only do it when needed,
+    // and always from the animation loop immediately before draw().
+    if(cv.width!==pixelW||cv.height!==pixelH){
+      cv.width=pixelW;cv.height=pixelH;
+      ctx.setTransform(DPR,0,0,DPR,0,0);
+    }
+  }
+
+  let P=0, mode='cinematic';
+  function ease(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;}
+  function computeP(){const total=cineSpace.offsetHeight;P=Math.min(1,Math.max(0,scrollY/total));if(reduce)P=1;}
+  function splitProgress(){
+    // Keep the first beat as a true full-screen landing, then open the reading pane.
+    const raw=Math.max(0,Math.min(1,(P-0.12)/0.76));
+    return reduce?1:ease(raw);
+  }
+  let resizePending=true;
+  function queueResize(){resizePending=true;}
+  function applyLayout(){
+    const isMobile=mobile();
+    const cinematicDone=P>0.98;
+    const reading=cinematicDone && !isMobile;
+
+    // The reader always owns its final width underneath the canvas.
+    document.documentElement.style.setProperty('--leftW',isMobile?'100vw':(leftFrac*100)+'vw');
+
+    // Desktop: canvas begins at 100vw and shrinks from the LEFT edge, revealing text.
+    // Once cinematic scroll is complete it lands at the normal split width.
+    let panelW=100;
+    if(panelMode==='collapsed') panelW=0;
+    else if(panelMode==='full') panelW=100;
+    else if(!isMobile){
+      const s=reading?1:splitProgress();
+      panelW=100-(leftFrac*100*s);
+    }
+    document.documentElement.style.setProperty('--panelW',panelW+'vw');
+
+    // On mobile, preserve the existing stacked reading mode but make the landing full-height.
+    panel.classList.toggle('full',panelMode==='full'||(isMobile&&panelMode==='split'&&!cinematicDone));
+    panel.classList.toggle('collapsed',panelMode==='collapsed');
+    panel.style.borderLeftColor=(panelMode==='split'&&!isMobile&&splitProgress()>0.02)?'var(--ink)':'transparent';
+
+    divider.classList.toggle('on', reading && panelMode==='split');
+    reopen.classList.toggle('on', reading && panelMode==='collapsed');
+    queueResize();
+  }
+  function applyCinematic(){
+    const align=Math.min(1,P/0.62);
+    const settle=Math.max(0,Math.min(1,(P-0.52)/0.48));
+    const eA=ease(align);
+    for(const n of pts){if(n.dragged)continue;n.tx=n.sx+(n.lx-n.sx)*eA;n.ty=n.sy+(n.ly-n.sy)*eA;}
+
+    // Hero stays intact at the top, then fades while the page physically splits.
+    const heroFade=ease(Math.max(0,Math.min(1,(P-0.10)/0.52)));
+    hero.style.opacity=String(1-heroFade);
+    pHead.style.opacity=String(0.55+0.45*settle);
+    pFoot.style.opacity=String(0.55+0.45*settle);
+    if(!assistantDismissed) assistant.classList.toggle('on', settle>0.5 && panelMode!=='collapsed');
+    mode=P>0.98?'reading':'cinematic';
+    panel._spine=eA; panel._edgesA=settle;
+  }
+  const focusables=[...document.querySelectorAll('.focusable')];
+  function updateFocus(){const cy=innerHeight*0.5;
+    for(const el of focusables){const r=el.getBoundingClientRect();const mid=r.top+r.height/2;
+      const sharp=Math.abs(mid-cy)<innerHeight*0.44 && r.top<innerHeight*0.92 && r.bottom>innerHeight*0.08;
+      el.classList.toggle('sharp',sharp||reduce);}}
+  let scrollRAF=0;
+  function runScrollFrame(){
+    scrollRAF=0;
+    computeP();applyCinematic();applyLayout();updateFocus();
+  }
+  function onScroll(){
+    // Collapse bursts of wheel/trackpad events into one visual update per frame.
+    if(!scrollRAF)scrollRAF=requestAnimationFrame(runScrollFrame);
+  }
+  addEventListener('scroll',onScroll,{passive:true});
+  addEventListener('resize',()=>{resizePending=true;runScrollFrame();});
+
+  let dragDiv=false;
+  divider.addEventListener('pointerdown',e=>{dragDiv=true;divider.classList.add('drag');divider.setPointerCapture(e.pointerId);e.preventDefault();});
+  addEventListener('pointermove',e=>{if(!dragDiv)return;leftFrac=Math.max(MINL,Math.min(MAXL,e.clientX/innerWidth));applyLayout();});
+  addEventListener('pointerup',()=>{if(dragDiv){dragDiv=false;divider.classList.remove('drag');}});
+  document.getElementById('btnGrn').addEventListener('click',e=>{e.stopPropagation();panelMode=(panelMode==='full')?'split':'full';applyLayout();});
+  document.getElementById('btnRed').addEventListener('click',e=>{e.stopPropagation();panelMode='collapsed';applyLayout();});
+  document.getElementById('btnYel').addEventListener('click',e=>{e.stopPropagation();panelMode='split';leftFrac=0.46;applyLayout();});
+  reopen.addEventListener('click',()=>{panelMode='split';applyLayout();});
+  document.getElementById('aClose').addEventListener('click',e=>{e.stopPropagation();assistantDismissed=true;assistant.classList.remove('on');assistant.classList.add('hidden');aPip.classList.add('on');});
+  aPip.addEventListener('click',()=>{assistantDismissed=false;assistant.classList.remove('hidden');assistant.classList.add('on');aPip.classList.remove('on');});
+
+  function activeNow(){return (mode==='reading'||reduce)&&!threadView.classList.contains('on');}
+  function nodeAt(mx,my){for(let i=pts.length-1;i>=0;i--){const p=pts[i];if(Math.hypot(mx-p.px,my-p.py)<p.rHit)return i;}return -1;}
+  function pos(e){const r=cv.getBoundingClientRect();const t=e.touches?e.touches[0]:e;return{x:t.clientX-r.left,y:t.clientY-r.top,cx:t.clientX,cy:t.clientY};}
+  function showTip(i,cx,cy){const p=pts[i];tip.innerHTML=p.tip;tip.classList.add('on');
+    let tx=cx+14,ty=cy+14;const tw=tip.offsetWidth,th=tip.offsetHeight;
+    if(tx+tw>innerWidth-8)tx=cx-tw-14;if(ty+th>innerHeight-8)ty=cy-th-14;tip.style.left=tx+'px';tip.style.top=ty+'px';}
+  function hideTip(){tip.classList.remove('on');}
+
+  function pairKey(a,b){return [a,b].sort((x,y)=>x.localeCompare(y)).join('||');}
+  function genericIntel(a,b){return{
+    status:"CONNECTION HYPOTHESIS",date:"user-made edge",fresh:false,
+    headline:`${a} may be converging with ${b}`,
+    summary:"No verified recent update is attached to this prototype edge yet. In production, MTS would search current reporting, primary sources and show transcripts before claiming why this connection matters.",
+    why:"The user has expressed a relationship. The next product action is evidence: support it, contradict it, or show what would make it become important.",
+    sources:[],
+    steps:[
+      {k:"NODE A",t:a,b:"Start with the first topic and its most recent verified signals."},
+      {k:"BRIDGE",t:"Look for a shared event, entity or constraint",b:"The system tests whether both topics touch the same companies, people, policy change, research result or market movement."},
+      {k:"NODE B",t:b,b:"Bring in the second topic only where the evidence actually overlaps."},
+      {k:"WATCH",t:"Promote the edge when evidence arrives",b:"A hypothesis becomes a live connection only after a source supports the relationship."}
+    ],
+    watch:`Watch for a new source that mentions both ${a} and ${b}, or a shared entity that moves both stories at once.`
+  };}
+  function getEdgeIntel(index){
+    const e=edges[index];if(!e)return null;const a=pts[e[0]],b=pts[e[1]];if(!a||!b)return null;
+    return edgeIntel[pairKey(a.label,b.label)]||genericIntel(a.label,b.label);
+  }
+  function quadPoint(p,q,t){const cx=(p.px+q.px)/2,cy=(p.py+q.py)/2-16,u=1-t;return{x:u*u*p.px+2*u*t*cx+t*t*q.px,y:u*u*p.py+2*u*t*cy+t*t*q.py};}
+  function edgeDistance(index,mx,my){
+    const e=edges[index],p=pts[e[0]],q=pts[e[1]];if(!p||!q)return{d:Infinity,t:.5};
+    let best=Infinity,bestT=.5;
+    for(let i=0;i<=24;i++){const t=i/24,z=quadPoint(p,q,t),d=Math.hypot(mx-z.x,my-z.y);if(d<best){best=d;bestT=t;}}
+    return{d:best,t:bestT};
+  }
+  function edgeAt(mx,my){let best=-1,dist=11;for(let i=0;i<edges.length;i++){const hit=edgeDistance(i,mx,my);if(hit.d<dist){dist=hit.d;best=i;}}return best;}
+  function clearEdgeHide(){if(edgeHideTimer){clearTimeout(edgeHideTimer);edgeHideTimer=0;}}
+  function hideEdgeCard(force=false){
+    clearEdgeHide();
+    if(!force&&edgePinned>=0)return;
+    edgeCard.classList.remove('on');edgeCard.setAttribute('aria-hidden','true');
+    if(force){edgePinned=-1;edgeHover=-1;}
+  }
+  function scheduleEdgeHide(){clearEdgeHide();edgeHideTimer=setTimeout(()=>hideEdgeCard(false),120);}
+  function positionEdgeCard(index,cx,cy){
+    const e=edges[index],p=pts[e[0]],q=pts[e[1]];if(!p||!q)return;
+    const cr=cv.getBoundingClientRect(),mid=quadPoint(p,q,.5);
+    let x=(cx??(cr.left+mid.x))+16,y=(cy??(cr.top+mid.y))+14;
+    const w=edgeCard.offsetWidth||360,h=edgeCard.offsetHeight||260;
+    const panelLeft=cr.left+8,panelRight=cr.right-8,minTop=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--topH'))+8;
+    if(x+w>panelRight)x=(cx??(cr.left+mid.x))-w-16;
+    x=Math.max(panelLeft,Math.min(panelRight-w,x));
+    if(y+h>innerHeight-8)y=(cy??(cr.top+mid.y))-h-16;
+    y=Math.max(minTop,Math.min(innerHeight-h-8,y));
+    edgeCard.style.left=x+'px';edgeCard.style.top=y+'px';
+  }
+  function showEdgeCard(index,cx,cy,pin=false){
+    const intel=getEdgeIntel(index),e=edges[index];if(!intel||!e)return;
+    clearEdgeHide();if(pin)edgePinned=index;edgeHover=index;
+    const a=pts[e[0]].label,b=pts[e[1]].label;
+    edgeStatus.textContent=intel.status;edgeDate.textContent=intel.date||'';
+    edgePair.innerHTML=`<b>${a}</b> &nbsp;×&nbsp; <b>${b}</b>`;
+    edgeHeadline.textContent=intel.headline;edgeSummary.textContent=intel.summary;edgeWhy.textContent=intel.why;
+    if(intel.href){edgeSource.textContent=(intel.source||'source')+' ↗';edgeSource.href=intel.href;edgeSource.classList.remove('hidden');}
+    else{edgeSource.removeAttribute('href');edgeSource.classList.add('hidden');}
+    followThread.dataset.edge=String(index);
+    edgeCard.classList.add('on');edgeCard.setAttribute('aria-hidden','false');
+    requestAnimationFrame(()=>positionEdgeCard(index,cx,cy));
+  }
+  function openThread(index){
+    const intel=getEdgeIntel(index),e=edges[index];if(!intel||!e)return;
+    const a=pts[e[0]].label,b=pts[e[1]].label;threadEdge=index;
+    hideTip();hideEdgeCard(true);
+    threadEyebrow.textContent=intel.status;threadPair.innerHTML=`<b>${a}</b> &nbsp;→&nbsp; <b>${b}</b>`;
+    threadTitle.textContent=intel.headline;threadDek.textContent=intel.why;
+    threadSources.innerHTML='';
+    (intel.sources||[]).forEach(s=>{const link=document.createElement('a');link.href=s.href;link.target='_blank';link.rel='noopener noreferrer';link.textContent=s.label+' ↗';threadSources.appendChild(link);});
+    threadSources.style.display=(intel.sources&&intel.sources.length)?'flex':'none';
+    threadPipeline.innerHTML='';
+    (intel.steps||[]).forEach(step=>{const row=document.createElement('div');row.className='thread-step';row.innerHTML=`<span class="step-dot"></span><div class="step-card"><div class="step-kicker">${step.k}</div><div class="step-title">${step.t}</div><div class="step-body">${step.b}</div></div>`;threadPipeline.appendChild(row);});
+    threadWatch.textContent=intel.watch||'Watch for the next verified signal that strengthens or breaks this relationship.';
+    threadView.classList.add('on');threadView.setAttribute('aria-hidden','false');panelModeLabel.textContent='THREAD VIEW';
+    assistant.classList.remove('on');
+  }
+  function closeThread(){
+    threadView.classList.remove('on');threadView.setAttribute('aria-hidden','true');threadEdge=-1;panelModeLabel.textContent='LIVE DEMO';
+    if(!assistantDismissed&&mode==='reading')assistant.classList.add('on');
+  }
+
+  edgeCard.addEventListener('pointerenter',clearEdgeHide);
+  edgeCard.addEventListener('pointerleave',()=>{if(edgePinned<0)scheduleEdgeHide();});
+  edgeClose.addEventListener('click',()=>hideEdgeCard(true));
+  followThread.addEventListener('click',()=>{const i=Number(followThread.dataset.edge);if(Number.isInteger(i))openThread(i);});
+  threadBack.addEventListener('click',closeThread);
+
+  cv.addEventListener('pointerdown',e=>{
+    if(!activeNow())return;const{x,y}=pos(e);dx0=x;dy0=y;dragMoved=false;const i=nodeAt(x,y);
+    if(i>=0){dragging=i;hideEdgeCard(true);cv.setPointerCapture(e.pointerId);}
+  });
+  cv.addEventListener('pointermove',e=>{
+    if(!activeNow())return;const{x,y,cx,cy}=pos(e);
+    if(dragging>=0){if(Math.hypot(x-dx0,y-dy0)>4)dragMoved=true;pts[dragging].px=x;pts[dragging].py=y;pts[dragging].dragged=true;hideTip();hideEdgeCard(true);}
+    else{
+      const i=nodeAt(x,y);
+      if(i>=0){hover=i;edgeHover=-1;cv.style.cursor='grab';showTip(i,cx,cy);if(edgePinned<0)scheduleEdgeHide();}
+      else{
+        hover=-1;hideTip();const ei=edgeAt(x,y);edgeHover=ei;cv.style.cursor=ei>=0?'pointer':'default';
+        if(ei>=0&&edgePinned<0)showEdgeCard(ei,cx,cy,false);else if(ei<0&&edgePinned<0)scheduleEdgeHide();
+      }
+    }
+  });
+  cv.addEventListener('pointerleave',()=>{hover=-1;edgeHover=-1;hideTip();if(edgePinned<0)scheduleEdgeHide();});
+  cv.addEventListener('pointerup',e=>{
+    if(!activeNow()){dragging=-1;return;}const{x,y,cx,cy}=pos(e);const i=nodeAt(x,y);
+    if(dragging>=0&&!dragMoved)clickNode(i>=0?i:dragging);
+    else if(dragging<0&&i>=0)clickNode(i);
+    else if(dragging<0){const ei=edgeAt(x,y);if(ei>=0)showEdgeCard(ei,cx,cy,true);}
+    dragging=-1;
+  });
+  function clickNode(i){
+    if(i<0)return;
+    if(selected===-1)selected=i;
+    else if(selected===i)selected=-1;
+    else{
+      const a=Math.min(selected,i),b=Math.max(selected,i);const ex=edges.findIndex(e=>e[0]===a&&e[1]===b);
+      if(ex>=0){if(edgePinned===ex)hideEdgeCard(true);edges.splice(ex,1);edgePinned=-1;edgeHover=-1;}
+      else{edges.push([a,b]);const ni=edges.length-1;selected=-1;setTimeout(()=>showEdgeCard(ni,null,null,true),40);return;}
+      selected=-1;
+    }
+  }
+
+  const sugg=[
+    "Hover a <b>connection</b> — the edge now carries the update, not just the line.",
+    "Drop <b>Neurotech</b> and <b>Robotics</b>, connect them, then follow the thread.",
+    "Connect <b>physical AI · 4D sim</b> with <b>agent swarms</b> — the relationship is the story.",
+    "A user-made edge starts as a <b>hypothesis</b>; verified evidence promotes it to a live update.",
+    "Open <b>Follow the thread</b> to turn a network relationship into a linear narrative."
+  ];
+  let si=0;function cyc(){aText.innerHTML=sugg[si%sugg.length];si++;}
+  setTimeout(cyc,1000);setInterval(cyc,5200);
+
+  function addNode(label,cat,fromEl){
+    const r=fromEl.getBoundingClientRect();
+    const fly=document.createElement('div');fly.className='fly';fly.textContent=label;
+    fly.style.left=r.left+'px';fly.style.top=r.top+'px';document.body.appendChild(fly);
+    const cr=cv.getBoundingClientRect();
+    const destX=cr.left+cr.width*(0.35+Math.random()*0.3), destY=cr.top+cr.height*(0.3+Math.random()*0.4);
+    requestAnimationFrame(()=>{fly.style.transition='transform .7s cubic-bezier(.4,0,.2,1),opacity .7s';fly.style.transform=`translate(${destX-r.left}px,${destY-r.top}px) scale(.9)`;fly.style.opacity='0.2';});
+    setTimeout(()=>{fly.remove();const nx=(destX-cr.left)/cr.width,ny=(destY-cr.top)/cr.height;
+      pts.push({label,cat,tip:`<b>${label}</b> — dropped in from the text. In a real drop this pulls the day's stories onto it.`,sx:nx,sy:ny,lx:nx,ly:ny,tx:nx,ty:ny,px:nx*W,py:ny*H,rHit:20,dragged:true});
+      selected=pts.length-1;setTimeout(()=>{if(selected===pts.length-1)selected=-1;},1400);},700);
+  }
+  document.querySelectorAll('.kw').forEach(k=>{k.addEventListener('click',()=>{if(k.classList.contains('used'))return;addNode(k.dataset.kw,k.dataset.cat||'ai',k);k.classList.add('used');const t=k.querySelector('.kwtip');if(t)t.remove();});});
+
+  function rr(a,b,w,h,r){ctx.beginPath();ctx.moveTo(a+r,b);ctx.arcTo(a+w,b,a+w,b+h,r);ctx.arcTo(a+w,b+h,a,b+h,r);ctx.arcTo(a,b+h,a,b,r);ctx.arcTo(a,b,a+w,b,r);ctx.closePath();}
+  function tick(){
+    // Resize before drawing, never in a competing rAF callback that can clear
+    // the canvas after a frame has already been painted. This prevents nodes
+    // from disappearing during continuous scrolling.
+    const r=cv.getBoundingClientRect();
+    if(resizePending||Math.abs(r.width-W)>0.5||Math.abs(r.height-H)>0.5){
+      resize();resizePending=false;
+    }
+    for(const n of pts){const TX=(n.tx||n.sx)*W,TY=(n.ty||n.sy)*H;if(!n.dragged){n.px+=(TX-n.px)*0.12;n.py+=(TY-n.py)*0.12;}}
+    if(mode==='reading'){for(let i=0;i<pts.length;i++){const p=pts[i];if(i===dragging)continue;
+      for(let j=0;j<pts.length;j++){if(i===j)continue;const q=pts[j];let dx=p.px-q.px,dy=p.py-q.py,d=Math.hypot(dx,dy)||1;if(d<70){p.px+=(dx/d)*(70-d)*0.02;p.py+=(dy/d)*(70-d)*0.02;}}
+      p.px=Math.max(70,Math.min(W-70,p.px));p.py=Math.max(60,Math.min(H-70,p.py));}}
+    draw();requestAnimationFrame(tick);
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    const spine=panel._spine||0, ea=panel._edgesA||0;
+    if(spine>0.15 && ea<0.5){ctx.strokeStyle=`rgba(59,111,224,${0.2*spine})`;ctx.lineWidth=2;
+      ctx.beginPath();pts.forEach((p,i)=>{if(i===0)ctx.moveTo(p.px,p.py);else ctx.lineTo(p.px,p.py);});ctx.stroke();}
+    const activeEdge=edgePinned>=0?edgePinned:edgeHover;
+    if(ea>0.02){edges.forEach(([a,b],ei)=>{const p=pts[a],q=pts[b];if(!p||!q)return;
+      const isActive=ei===activeEdge,dim=activeEdge>=0&&!isActive;
+      ctx.strokeStyle=isActive?`rgba(59,111,224,${0.95*ea})`:`rgba(59,111,224,${(dim?0.10:0.42)*ea})`;
+      ctx.lineWidth=isActive?2.8:1.5;
+      ctx.beginPath();ctx.moveTo(p.px,p.py);const mx=(p.px+q.px)/2,my=(p.py+q.py)/2-16;ctx.quadraticCurveTo(mx,my,q.px,q.py);ctx.stroke();
+      const intel=getEdgeIntel(ei);
+      if(intel&&intel.fresh&&!dim){
+        const t=((performance.now()/3600)+(ei*.23))%1,z=quadPoint(p,q,t);
+        ctx.beginPath();ctx.arc(z.x,z.y,isActive?4:3,0,Math.PI*2);ctx.fillStyle=isActive?'#F6D64A':'rgba(246,214,74,.82)';ctx.fill();
+      }
+    });}
+    ctx.font='500 12px "JetBrains Mono", monospace';
+    pts.forEach((p,i)=>{const w=ctx.measureText(p.label).width+30,h=26;p.rHit=Math.max(w,h)/2+3;
+      const X=p.px-w/2,Y=p.py-h/2;const act=i===selected,hot=i===hover;
+      const related=activeEdge<0||!edges[activeEdge]||edges[activeEdge][0]===i||edges[activeEdge][1]===i;
+      ctx.globalAlpha=related?1:.28;
+      if(act||((activeEdge>=0)&&related)){ctx.shadowColor='rgba(59,111,224,.28)';ctx.shadowBlur=act?14:8;}
+      rr(X,Y,w,h,7);ctx.fillStyle=act?'#E7EEFB':'#FBF9F3';ctx.fill();ctx.shadowBlur=0;
+      ctx.lineWidth=act?2:(activeEdge>=0&&related?1.8:1.2);ctx.strokeStyle=act?'#3B6FE0':(hot?'#8f9bb3':(activeEdge>=0&&related?'#3B6FE0':'#C9C2B2'));ctx.stroke();
+      ctx.beginPath();ctx.arc(X+13,p.py,3.4,0,7);ctx.fillStyle=cats[p.cat];ctx.fill();
+      ctx.fillStyle='#1A1712';ctx.textBaseline='middle';ctx.fillText(p.label,X+21,p.py+1);ctx.globalAlpha=1;});
+  }
+
+  resize();applyLayout();resizePending=false;
+  pts.forEach(p=>{p.px=p.sx*W;p.py=p.sy*H;p.tx=p.sx;p.ty=p.sy;});
+  runScrollFrame();requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
