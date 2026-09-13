@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Consolidation — a note for MTS</title>
+<title>Making Tidings Stick (MTS!) — a note on where I'd build for MTS</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400&display=swap');
   :root{
     --paper:#F4F1EA;--paper-2:#EDE9DE;--ink:#1A1712;--ink-soft:#4A453B;--muted:#8A8375;
     --rule:#D8D2C4;--edge:#C9C2B2;--blue:#3B6FE0;--blue-soft:#5C86E8;--yellow:#F6D64A;--red:#D65A4A;
@@ -14,16 +14,15 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
-  body{background:var(--paper);color:var(--ink);
-    font-family:'JetBrains Mono',ui-monospace,monospace;line-height:1.62;
+  body{background:var(--paper);color:var(--ink);line-height:1.62;
     -webkit-font-smoothing:antialiased;overflow-x:hidden}
 
   .topbar{position:fixed;top:0;left:0;right:0;z-index:90;height:var(--topH);
     background:linear-gradient(180deg,#15151b,#0f0f14);color:#B9C0CE;
     display:flex;align-items:center;justify-content:space-between;
-    padding:0 18px;font-size:12px;font-weight:500;border-bottom:1px solid #000}
+    padding:0 18px;border-bottom:1px solid #000}
   .topbar .brand{display:flex;align-items:center;gap:8px;color:#E8E6E0}
-  .topbar .status{color:#8A93A6}.topbar .status .live{color:var(--red);font-weight:700}
+  .topbar .status{color:#8A93A6}.topbar .status .live{color:var(--red);}
   .logo-dots{display:inline-flex;gap:3px;vertical-align:middle}
   .logo-dots b{width:11px;height:11px;border-radius:50%;display:block}
 
@@ -39,23 +38,22 @@
 
   .panel-head{position:relative;z-index:3;display:flex;align-items:center;gap:8px;
     padding:10px 16px;background:rgba(237,233,222,.82);backdrop-filter:blur(4px);
-    border-bottom:1px solid var(--rule);font-size:12px;color:var(--muted)}
+    border-bottom:1px solid var(--rule);color:var(--muted)}
   .lights{display:flex;gap:7px}
   .lights i{width:11px;height:11px;border-radius:50%;display:block;cursor:pointer;position:relative;transition:transform .1s}
   .lights i:hover{transform:scale(1.15)}
   .lights .r{background:#E96A5E}.lights .y{background:#F1BE4F}.lights .g{background:#69C066}
-  .lights i::after{content:attr(data-h);position:absolute;top:20px;left:50%;transform:translateX(-50%);
-    font-size:9px;color:var(--muted);background:var(--paper);padding:1px 5px;border-radius:4px;border:1px solid var(--rule);
+  .lights i::after{content:attr(data-h);position:absolute;top:20px;left:50%;transform:translateX(-50%);color:var(--muted);background:var(--paper);padding:1px 5px;border-radius:4px;border:1px solid var(--rule);
     white-space:nowrap;opacity:0;pointer-events:none;transition:.12s;letter-spacing:.03em;z-index:9}
   .lights i:hover::after{opacity:1}
-  .panel-head .agent{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--ink)}
+  .panel-head .agent{display:flex;align-items:center;gap:8px;color:var(--ink)}
   .panel-head .agent .face{width:18px;height:18px;border-radius:50%;
     background:radial-gradient(circle at 38% 34%,#fff,var(--neuro));border:1px solid var(--rule)}
-  .panel-head .sim{margin-left:auto;font-size:10.5px;letter-spacing:.12em}
+  .panel-head .sim{margin-left:auto;letter-spacing:.12em}
 
   .panel-foot{position:relative;z-index:3;margin-top:auto;
     padding:10px 16px;background:rgba(237,233,222,.82);backdrop-filter:blur(4px);
-    border-top:1px solid var(--rule);font-size:11.5px;color:var(--muted);
+    border-top:1px solid var(--rule);color:var(--muted);
     display:flex;gap:8px;align-items:center}
   .panel-foot .chip{background:var(--paper);border:1px solid var(--rule);border-radius:20px;padding:2px 9px;color:var(--ink-soft)}
   .panel-foot .legend{display:flex;gap:9px;margin-left:auto}
@@ -66,10 +64,10 @@
     text-align:center;padding:0 6%;pointer-events:none}
   #hero .veil{position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 50%,rgba(244,241,234,.92) 30%,rgba(244,241,234,.5) 70%,transparent 100%)}
   #hero .inner{position:relative}
-  .eyebrow{font-size:12px;letter-spacing:.16em;color:var(--muted);margin-bottom:16px}
-  h1.title{font-family:'Fraunces',serif;font-weight:700;font-size:clamp(30px,4.4vw,52px);line-height:1.03;letter-spacing:-.02em}
+  .eyebrow{letter-spacing:.16em;color:var(--muted);margin-bottom:16px}
+  h1.title{line-height:1.03;letter-spacing:-.02em}
   h1.title .mark{background:linear-gradient(180deg,transparent 60%,var(--yellow) 60% 92%,transparent 92%);padding:0 6px}
-  .hero-sub{font-family:'Fraunces',serif;font-size:clamp(15px,1.9vw,19px);color:var(--ink-soft);margin-top:16px}
+  .hero-sub{color:var(--ink-soft);margin-top:16px}
 
   .assistant{position:absolute;left:16px;bottom:56px;z-index:6;display:flex;gap:8px;align-items:flex-start;
     background:rgba(251,249,243,.95);backdrop-filter:blur(3px);border:1px solid var(--rule);border-radius:10px;
@@ -77,47 +75,60 @@
   .assistant.on{opacity:1}.assistant.hidden{display:none}
   .assistant .a-face{width:16px;height:16px;border-radius:50%;flex:none;margin-top:1px;
     background:radial-gradient(circle at 38% 34%,#fff,var(--macro));border:1px solid var(--rule)}
-  .assistant .a-x{position:absolute;top:5px;right:8px;font-size:13px;line-height:1;color:var(--muted);cursor:pointer}
+  .assistant .a-x{position:absolute;top:5px;right:8px;line-height:1;color:var(--muted);cursor:pointer}
   .assistant .a-x:hover{color:var(--ink)}
-  .a-name{font-size:9px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
-  .a-text{font-size:11.5px;color:var(--ink);line-height:1.4;display:block;margin-top:2px}.a-text b{color:var(--blue)}
+  .a-name{letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+  .a-text{color:var(--ink);line-height:1.4;display:block;margin-top:2px}.a-text b{color:var(--blue)}
   .a-pip{position:absolute;left:16px;bottom:56px;z-index:6;width:26px;height:26px;border-radius:50%;
     background:radial-gradient(circle at 38% 34%,#fff,var(--macro));border:1px solid var(--rule);cursor:pointer;display:none;
     box-shadow:0 4px 12px rgba(0,0,0,.12)}
   .a-pip.on{display:block}
 
   .tip{position:fixed;pointer-events:none;z-index:95;background:#1A1712;color:#F4F1EA;border-radius:7px;
-    padding:7px 10px;font-size:11.5px;line-height:1.45;max-width:240px;box-shadow:0 6px 18px rgba(0,0,0,.35);
+    padding:7px 10px;line-height:1.45;max-width:240px;box-shadow:0 6px 18px rgba(0,0,0,.35);
     opacity:0;transform:translateY(3px);transition:.12s}
   .tip.on{opacity:1;transform:none}.tip b{color:var(--yellow)}
 
   /* EDGE INTELLIGENCE — the relationship carries the update */
-  .edge-card{position:fixed;z-index:97;width:min(360px,calc(100vw - 28px));
+  .edge-card{position:fixed;z-index:97;width:min(360px,calc(100vw - 28px));max-height:calc(100vh - var(--topH) - 16px);overflow:auto;
     background:rgba(251,249,243,.98);border:1px solid var(--ink);border-radius:11px;
     padding:14px 15px 13px;box-shadow:0 14px 36px rgba(0,0,0,.18);
     opacity:0;transform:translateY(5px) scale(.985);pointer-events:none;
     transition:opacity .14s ease,transform .14s ease}
   .edge-card.on{opacity:1;transform:none;pointer-events:auto}
-  .ec-close{position:absolute;right:9px;top:7px;border:0;background:transparent;color:var(--muted);
-    font:500 17px/1 'JetBrains Mono',monospace;cursor:pointer;padding:3px 5px}
+  .ec-close{position:absolute;right:9px;top:7px;border:0;background:transparent;color:var(--muted);cursor:pointer;padding:3px 5px}
   .ec-close:hover{color:var(--ink)}
-  .ec-meta{display:flex;align-items:center;gap:8px;padding-right:24px;margin-bottom:7px;
-    font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
-  .ec-status{display:inline-flex;align-items:center;gap:5px;color:var(--blue);font-weight:700}
+  .ec-meta{display:flex;align-items:center;gap:8px;padding-right:24px;margin-bottom:7px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+  .ec-status{display:inline-flex;align-items:center;gap:5px;color:var(--blue);}
   .ec-status::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--yellow);box-shadow:0 0 0 3px rgba(246,214,74,.18)}
-  .ec-pair{font-size:10px;color:var(--muted);margin-bottom:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .ec-pair b{color:var(--ink);font-weight:700}
-  .ec-headline{font-family:'Fraunces',serif;font-size:19px;line-height:1.14;letter-spacing:-.01em;margin:0 0 8px}
-  .ec-summary{font-size:11.5px;line-height:1.5;color:var(--ink-soft);margin:0 0 10px}
+  .ec-pair{color:var(--muted);margin-bottom:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ec-pair b{color:var(--ink);}
+  .ec-headline{line-height:1.14;letter-spacing:-.01em;margin:0 0 8px}
+  .ec-summary{line-height:1.5;color:var(--ink-soft);margin:0 0 10px}
   .ec-why{background:var(--paper-2);border:1px solid var(--rule);border-radius:7px;padding:8px 9px;margin-bottom:10px}
-  .ec-why b{display:block;color:var(--blue);font-size:9px;letter-spacing:.09em;text-transform:uppercase;margin-bottom:3px}
-  .ec-why span{display:block;font-size:11px;line-height:1.43;color:var(--ink)}
-  .ec-actions{display:flex;align-items:center;gap:9px}
-  .ec-follow{appearance:none;border:1px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:6px;
-    padding:7px 9px;font:700 10.5px/1 'JetBrains Mono',monospace;cursor:pointer}
+  .ec-why b{display:block;color:var(--blue);letter-spacing:.09em;text-transform:uppercase;margin-bottom:3px}
+  .ec-why span{display:block;line-height:1.43;color:var(--ink)}
+  .ec-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .ec-follow,.ec-potential{appearance:none;border:1px solid var(--ink);border-radius:6px;padding:7px 9px;cursor:pointer}
+  .ec-follow{background:var(--ink);color:var(--paper)}
   .ec-follow:hover{background:var(--blue);border-color:var(--blue)}
-  .ec-source{font-size:10px!important;color:var(--blue)!important;border-bottom:1px dashed var(--blue-soft)!important;white-space:nowrap}
+  .ec-potential{background:var(--paper);color:var(--ink);border-color:var(--rule)}
+  .ec-potential:hover,.ec-potential.on{border-color:#C9A51A;background:#FFF7CB;color:#705A00}
+  .ec-source{color:var(--blue)!important;border-bottom:1px dashed var(--blue-soft)!important;white-space:nowrap}
   .ec-source.hidden{display:none}
+  .momentum-panel{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--rule)}
+  .momentum-panel.on{display:block}
+  .momentum-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:7px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+  .momentum-score-row{display:flex;align-items:flex-end;gap:10px;margin-bottom:7px}
+  .momentum-score{line-height:.92;color:var(--ink)}
+  .momentum-label{color:var(--ink-soft);line-height:1.25;padding-bottom:2px}
+  .momentum-meter{height:5px;border-radius:999px;background:var(--paper-2);overflow:hidden;margin:7px 0 8px}
+  .momentum-meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--yellow));border-radius:inherit;transition:width .38s ease}
+  .momentum-stats{color:var(--muted);margin-bottom:9px}
+  .momentum-headlines{display:grid;gap:6px}
+  .momentum-item{padding:7px 8px;border:1px solid var(--rule);border-radius:7px;background:rgba(244,241,234,.72);line-height:1.35;color:var(--ink)}
+  .momentum-item span{display:block;color:var(--muted);margin-bottom:2px;text-transform:uppercase;letter-spacing:.06em}
+  .momentum-note{margin-top:8px;color:var(--muted);line-height:1.35}
 
   /* THREAD VIEW — a selected relationship becomes a structured story */
   #threadView{position:absolute;z-index:8;left:0;right:0;top:39px;bottom:43px;
@@ -128,17 +139,17 @@
   .thread-toolbar{position:sticky;top:0;z-index:2;height:42px;display:flex;align-items:center;justify-content:space-between;
     padding:0 15px;background:rgba(237,233,222,.91);backdrop-filter:blur(5px);border-bottom:1px solid var(--rule)}
   .thread-back{appearance:none;border:1px solid var(--rule);background:var(--paper);border-radius:6px;color:var(--ink);
-    padding:5px 8px;font:700 10.5px/1 'JetBrains Mono',monospace;cursor:pointer}
+    padding:5px 8px;cursor:pointer}
   .thread-back:hover{border-color:var(--blue);color:var(--blue)}
-  .thread-mode{font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+  .thread-mode{letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
   .thread-inner{max-width:610px;margin:0 auto;padding:28px 34px 48px}
-  .thread-eyebrow{font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--blue);margin-bottom:7px}
-  .thread-pair{font-size:11px;color:var(--muted);margin-bottom:9px}
+  .thread-eyebrow{letter-spacing:.13em;text-transform:uppercase;color:var(--blue);margin-bottom:7px}
+  .thread-pair{color:var(--muted);margin-bottom:9px}
   .thread-pair b{color:var(--ink)}
-  .thread-title{font-family:'Fraunces',serif;font-size:clamp(24px,3vw,35px);line-height:1.04;letter-spacing:-.02em;margin-bottom:10px}
-  .thread-dek{font-family:'Fraunces',serif;font-size:15px;line-height:1.42;color:var(--ink-soft);margin-bottom:26px}
+  .thread-title{line-height:1.04;letter-spacing:-.02em;margin-bottom:10px}
+  .thread-dek{line-height:1.42;color:var(--ink-soft);margin-bottom:26px}
   .thread-source-row{display:flex;gap:7px;flex-wrap:wrap;margin:-12px 0 24px}
-  .thread-source-row a{font-size:9.5px;background:var(--paper);border:1px solid var(--rule);border-radius:20px;padding:3px 8px;color:var(--ink-soft);text-decoration:none}
+  .thread-source-row a{background:var(--paper);border:1px solid var(--rule);border-radius:20px;padding:3px 8px;color:var(--ink-soft);text-decoration:none}
   .thread-source-row a:hover{border-color:var(--blue);color:var(--blue)}
   .pipeline{position:relative;margin:2px 0 26px}
   .pipeline::before{content:"";position:absolute;left:14px;top:12px;bottom:20px;width:1px;background:linear-gradient(var(--blue),var(--rule))}
@@ -146,12 +157,12 @@
   .step-dot{position:relative;z-index:1;width:10px;height:10px;border-radius:50%;margin:11px 0 0 9px;background:var(--paper);border:2px solid var(--blue);box-shadow:0 0 0 4px rgba(244,241,234,.95)}
   .thread-step:last-child .step-dot{border-color:var(--yellow);background:var(--yellow)}
   .step-card{background:rgba(251,249,243,.95);border:1px solid var(--rule);border-radius:8px;padding:10px 12px}
-  .step-kicker{font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--blue);font-weight:700;margin-bottom:2px}
-  .step-title{font-family:'Fraunces',serif;font-size:17px;line-height:1.2;color:var(--ink);margin-bottom:4px}
-  .step-body{font-size:11.5px;line-height:1.48;color:var(--ink-soft)}
+  .step-kicker{letter-spacing:.11em;text-transform:uppercase;color:var(--blue);margin-bottom:2px}
+  .step-title{line-height:1.2;color:var(--ink);margin-bottom:4px}
+  .step-body{line-height:1.48;color:var(--ink-soft)}
   .thread-watch{border-left:3px solid var(--yellow);padding:9px 11px;background:rgba(251,249,243,.82)}
-  .thread-watch b{display:block;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8A6D12;margin-bottom:3px}
-  .thread-watch span{font-family:'Fraunces',serif;font-size:14px;line-height:1.4;color:var(--ink)}
+  .thread-watch b{display:block;letter-spacing:.1em;text-transform:uppercase;color:#8A6D12;margin-bottom:3px}
+  .thread-watch span{line-height:1.4;color:var(--ink)}
 
   #divider{position:fixed;top:var(--topH);bottom:0;z-index:60;width:14px;
     left:calc(var(--leftW) - 7px);cursor:col-resize;display:none;align-items:center;justify-content:center}
@@ -161,33 +172,36 @@
   #reopen{position:fixed;top:var(--topH);right:0;bottom:0;z-index:60;width:34px;background:var(--paper-2);
     border-left:1px solid var(--ink);display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer}
   #reopen.on{display:flex}
-  #reopen span{writing-mode:vertical-rl;font-size:11px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+  #reopen span{writing-mode:vertical-rl;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
   #reopen .dotc{width:8px;height:8px;border-radius:50%;background:var(--blue)}
 
   /* LEFT: reading column */
   #reader{position:relative;z-index:30;width:var(--leftW);
     padding:calc(var(--topH) + 5vh) 4vw 16vh 5vw}
   #cineSpace{height:150vh}
-  .lead{font-family:'Fraunces',serif;font-size:clamp(18px,2.1vw,23px);line-height:1.42;margin-bottom:60px}
+  .lead{line-height:1.42;margin-bottom:60px}
   .lead b{background:linear-gradient(180deg,transparent 62%,#FBE9A0 62% 92%,transparent 92%)}
+  .lead p{line-height:inherit;color:var(--ink);margin-bottom:14px}
+  .intro-list{margin:4px 0 18px 1.7em;padding-left:.6em}
+  .intro-list li{line-height:1.45;color:var(--ink-soft);padding-left:.25em;margin:3px 0}
   .section{margin-bottom:20vh}.section:last-of-type{margin-bottom:10vh}
-  .tag{font-size:12px;letter-spacing:.1em;color:var(--blue);font-weight:700;margin-bottom:6px}
+  .tag{letter-spacing:.1em;color:var(--blue);margin-bottom:6px}
   .tag .n{color:var(--muted);margin-right:8px}
   .hr{height:1px;background:var(--rule);margin:8px 0 18px}
-  h2{font-family:'Fraunces',serif;font-size:26px;font-weight:600;letter-spacing:-.01em;margin-bottom:12px}
-  h3{font-family:'Fraunces',serif;font-size:20px;font-weight:600;margin:22px 0 8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  h2{letter-spacing:-.01em;margin-bottom:12px}
+  h3{margin:22px 0 8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   h3 .num{color:var(--blue)}
-  p{font-size:14.5px;color:var(--ink-soft);margin-bottom:14px}
+  p{color:var(--ink-soft);margin-bottom:14px}
   p strong{color:var(--ink)}
   a{color:var(--blue);border-bottom:1px dashed var(--blue-soft);text-decoration:none}
   .callout{border-left:3px solid var(--blue);padding-left:16px;margin:16px 0}.callout p{color:var(--ink);margin:0}
   ul.spec{list-style:none;padding:14px 16px;margin:12px 0;background:var(--paper-2);border:1px solid var(--rule);border-radius:8px}
-  ul.spec li{font-size:13px;color:var(--ink-soft);margin-bottom:7px}ul.spec li:last-child{margin-bottom:0}ul.spec b{color:var(--ink)}
-  .why{margin-top:12px;padding-top:12px;border-top:1px dashed var(--rule);font-size:13.5px}.why b{color:var(--blue)}
+  ul.spec li{color:var(--ink-soft);margin-bottom:7px}ul.spec li:last-child{margin-bottom:0}ul.spec b{color:var(--ink)}
+  .why{margin-top:12px;padding-top:12px;border-top:1px dashed var(--rule);}.why b{color:var(--blue)}
   .proof{list-style:none;padding:0;margin:14px 0}
-  .proof li{font-size:13px;color:var(--ink-soft);padding:9px 12px;margin-bottom:7px;background:var(--paper-2);border:1px solid var(--rule);border-radius:7px}
+  .proof li{color:var(--ink-soft);padding:9px 12px;margin-bottom:7px;background:var(--paper-2);border:1px solid var(--rule);border-radius:7px}
   .proof b{color:var(--ink)}
-  .foot{color:var(--muted);font-size:12.5px;margin-top:8px}
+  .foot{color:var(--muted);margin-top:8px}
 
   /* Keep reading copy compositor-friendly while scrolling.
      Blur filters can flicker/disappear during active scroll in Chromium/WebKit. */
@@ -195,21 +209,42 @@
     transition:opacity .32s ease,transform .32s ease;will-change:opacity,transform}
   .focusable.sharp{opacity:1;transform:none}
 
-  .kw{position:relative;display:inline-block;cursor:pointer;font-weight:700;color:var(--ink);
+  .kw{position:relative;display:inline-block;cursor:pointer;color:var(--ink);
     background:linear-gradient(180deg,transparent 52%,var(--yellow) 52% 96%,transparent 96%);
     padding:1px 6px;border-radius:4px;border:1px solid #E0BE3A;animation:kwblink 1.4s ease-in-out infinite}
-  .kw::after{content:"+node";font-size:9px;font-weight:700;letter-spacing:.04em;color:#8A6D12;
+  .kw::after{content:"+node";letter-spacing:.04em;color:#8A6D12;
     background:rgba(255,255,255,.6);border:1px solid #E0BE3A;border-radius:3px;padding:0 3px;margin-left:5px;vertical-align:1px}
   @keyframes kwblink{0%,100%{box-shadow:0 0 0 0 rgba(246,214,74,0);border-color:#E0BE3A}50%{box-shadow:0 0 0 4px rgba(246,214,74,.4);border-color:#C99A1E}}
   .kw:hover{box-shadow:0 0 0 5px rgba(246,214,74,.75)!important;animation:none;transform:translateY(-1px)}
-  .kw .kwtip{position:absolute;bottom:calc(100% + 9px);left:50%;transform:translateX(-50%);background:#1A1712;color:#F4F1EA;
-    font-weight:400;font-size:11px;white-space:nowrap;padding:5px 9px;border-radius:6px;opacity:0;pointer-events:none;transition:.12s;z-index:60}
+  .kw .kwtip{position:absolute;bottom:calc(100% + 9px);left:50%;transform:translateX(-50%);background:#1A1712;color:#F4F1EA;white-space:nowrap;padding:5px 9px;border-radius:6px;opacity:0;pointer-events:none;transition:.12s;z-index:60}
   .kw .kwtip::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1A1712}
   .kw:hover .kwtip{opacity:1}
-  .kw.used{animation:none;color:var(--muted);background:none;border-color:transparent;cursor:default;box-shadow:none;text-decoration:line-through;font-weight:500}
+  .kw.used{animation:none;color:var(--muted);background:none;border-color:transparent;cursor:default;box-shadow:none;text-decoration:line-through;}
   .kw.used::after{display:none}.kw.used .kwtip{display:none}
-  .fly{position:fixed;z-index:96;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;
+  .fly{position:fixed;z-index:96;
     background:#FBF9F3;border:1px solid var(--ink);border-radius:7px;padding:4px 10px;pointer-events:none;box-shadow:0 8px 20px rgba(0,0,0,.2)}
+
+  /* SCROLL STORY + MEMORY PHYSICS */
+  #canvasPanel{transition:width .22s cubic-bezier(.22,.61,.36,1),border-color .22s ease}
+  #memoryReadout{margin-left:auto;white-space:nowrap;color:var(--muted)}
+  #memoryReadout .kept{color:var(--blue)}
+  #memoryReadout .drift{color:var(--muted)}
+  .panel-foot .legend{margin-left:0}
+  .scene-whisper{position:absolute;z-index:5;left:50%;top:76px;transform:translateX(-50%) translateY(5px);
+    padding:4px 8px;border:1px solid var(--rule);border-radius:20px;background:rgba(244,241,234,.88);
+    color:var(--muted);letter-spacing:.10em;text-transform:uppercase;opacity:0;pointer-events:none;
+    transition:opacity .28s ease,transform .28s ease;backdrop-filter:blur(4px)}
+  .scene-whisper.on{opacity:1;transform:translateX(-50%) translateY(0)}
+  .retained-toast{position:fixed;z-index:98;pointer-events:none;padding:4px 8px;border-radius:20px;
+    background:rgba(26,23,18,.94);color:var(--paper);letter-spacing:.10em;text-transform:uppercase;
+    opacity:0;transform:translate(-50%,-50%) translateY(5px);animation:retainToast 1.45s ease forwards}
+  @keyframes retainToast{0%{opacity:0;transform:translate(-50%,-50%) translateY(7px)}15%,68%{opacity:1;transform:translate(-50%,-50%) translateY(0)}100%{opacity:0;transform:translate(-50%,-50%) translateY(-8px)}}
+  #reader .section{position:relative}
+  #scene-throughline .focusable{position:relative;z-index:2}
+  .merge-past{transition:filter .42s ease,opacity .42s ease,transform .42s ease;will-change:filter,opacity,transform}
+  #scene-throughline .focusable::before{content:"";position:absolute;z-index:-1;inset:-22px -26px;border-radius:18px;
+    background:rgba(244,241,234,.00);box-shadow:0 0 0 0 rgba(244,241,234,0);pointer-events:none;transition:background .35s ease,box-shadow .35s ease}
+  body.recombined #scene-throughline .focusable::before{background:rgba(244,241,234,.84);box-shadow:0 14px 40px rgba(244,241,234,.72)}
 
   @media (max-width:820px){
     :root{--leftW:100vw}
@@ -225,13 +260,81 @@
   @media (prefers-reduced-motion:reduce){
     *{scroll-behavior:auto}.focusable{filter:none;opacity:1;transform:none}.kw{animation:none}
   }
+
+  /* TYPOGRAPHY + READER CLEANUP — intentionally only three sizes */
+  :root{
+    --fs-small:12px;
+    --fs-body:15px;
+    --fs-display:32px;
+  }
+  *,*::before,*::after{
+    font-family:Helvetica,"Helvetica Neue",Arial,sans-serif!important;
+    font-weight:400!important;
+  }
+  body{font-size:var(--fs-body);}
+
+  /* Small interface text */
+  .topbar,.panel-head,.panel-foot,.lights i::after,
+  .assistant,.a-name,.a-text,.tip,.edge-card,.ec-meta,.ec-pair,.ec-summary,
+  .ec-why,.ec-follow,.ec-potential,.ec-source,.thread-toolbar,.thread-back,.thread-mode,
+  .thread-eyebrow,.thread-pair,.thread-source-row,.step-kicker,.step-body,
+  .thread-watch,.tag,#reopen,.kw::after,.kw .kwtip,.fly,#memoryReadout,.scene-whisper,.retained-toast,
+  .momentum-top,.momentum-stats,.momentum-item,.momentum-note{
+    font-size:var(--fs-small)!important;
+  }
+
+  /* Body copy */
+  p,.lead,.lead p,.intro-list,.intro-list li,h3,ul.spec,ul.spec li,
+  .why,.proof,.proof li,.hero-sub,.ec-headline,.thread-dek,.step-title,
+  .thread-watch span,.kw,.ec-close{
+    font-size:var(--fs-body)!important;
+  }
+
+  /* Display headings — editorial serif only for the largest titles. */
+  h1.title,h2,.thread-title,.momentum-score{
+    font-size:var(--fs-display)!important;
+    font-family:'Fraunces',Georgia,'Times New Roman',serif!important;
+    font-weight:400!important;
+    letter-spacing:-.035em;
+  }
+
+  /* No decorative numbering / rules / callout bars. */
+  .tag .n,h3 .num,.hr{display:none!important;}
+  .intro-list{list-style:none;margin-left:0;padding-left:0;}
+  .callout,.why,.thread-watch{
+    border-left:0!important;
+    border-top:0!important;
+    padding-left:0!important;
+  }
+  .callout{margin:16px 0;}
+  .why{padding-top:0!important;}
+
+  /* Blur → clear reveal. IntersectionObserver drives the state so the browser
+     is not recalculating filters on every wheel/trackpad event. */
+  .focusable{
+    filter:blur(4px);
+    opacity:.34;
+    transform:translate3d(0,10px,0);
+    transition:filter .58s ease,opacity .58s ease,transform .58s ease;
+    will-change:filter,opacity,transform;
+    backface-visibility:hidden;
+  }
+  .focusable.sharp{
+    filter:blur(0);
+    opacity:1;
+    transform:translate3d(0,0,0);
+  }
+  @media (prefers-reduced-motion:reduce){
+    .focusable{filter:none!important;opacity:1!important;transform:none!important;transition:none!important;}
+  }
+
 </style>
 </head>
 <body>
 
   <div class="topbar">
     <span class="brand"><span class="logo-dots"><b style="background:var(--yellow)"></b><b style="background:var(--macro)"></b><b style="background:var(--neuro)"></b></span> MTS Browser</span>
-    <span class="status">monitoring the situation · <span class="live">a note from Chaeyeon</span></span>
+    <span class="status"><span id="statusMode">monitoring the situation</span> · <span class="live" id="statusLive">a note from Chaeyeon</span></span>
   </div>
 
   <div id="canvasPanel">
@@ -241,6 +344,7 @@
       <span class="sim" id="panelModeLabel">LIVE DEMO</span>
     </div>
     <canvas id="cv"></canvas>
+    <div class="scene-whisper" id="sceneWhisper" aria-hidden="true"></div>
 
     <div id="threadView" aria-hidden="true">
       <div class="thread-toolbar">
@@ -267,15 +371,23 @@
       <div class="ec-why"><b>Why this connection</b><span id="edgeWhy"></span></div>
       <div class="ec-actions">
         <button class="ec-follow" id="followThread" type="button">Follow the thread →</button>
+        <button class="ec-potential" id="edgePotential" type="button" aria-expanded="false">Potential · 0%</button>
         <a class="ec-source hidden" id="edgeSource" target="_blank" rel="noopener noreferrer">source ↗</a>
+      </div>
+      <div class="momentum-panel" id="momentumPanel" aria-hidden="true">
+        <div class="momentum-top"><span>synthetic momentum</span><span id="momentumDelta"></span></div>
+        <div class="momentum-score-row"><span class="momentum-score" id="momentumScore">0%</span><span class="momentum-label">near-term breakout potential</span></div>
+        <div class="momentum-meter" aria-hidden="true"><i id="momentumMeter"></i></div>
+        <div class="momentum-stats" id="momentumStats"></div>
+        <div class="momentum-headlines" id="momentumHeadlines"></div>
+        <div class="momentum-note">Prototype score = synthetic intersection-post volume + 7-day acceleration. Example headlines are synthetic, not live reporting.</div>
       </div>
     </div>
 
     <div id="hero"><div class="veil"></div>
       <div class="inner">
         <p class="eyebrow">A NOTE ON WHERE I'D BUILD FOR MTS</p>
-        <h1 class="title">Making Tidings <br><span class="mark">Stick (MTS!)</span></h1>
-        <p class="hero-sub">Scroll and watch the noise line up.</p>
+        <h1 class="title">Making Tidings Stick <span class="mark">(MTS!)</span></h1>
       </div>
     </div>
     <div class="assistant" id="assistant"><span class="a-x" id="aClose">×</span><span class="a-face"></span>
@@ -284,6 +396,7 @@
     <div class="a-pip" id="aPip" title="assistant"></div>
     <div class="panel-foot" id="pFoot">
       <span class="chip">story = node</span><span class="chip">connection = the product</span>
+      <span id="memoryReadout" aria-live="polite"><span class="kept">0 retained</span> · <span class="drift">0 drifting</span></span>
       <span class="legend">
         <span><i style="background:var(--ai)"></i>ai</span>
         <span><i style="background:var(--neuro)"></i>neuro</span>
@@ -300,57 +413,78 @@
   <main id="reader">
     <div id="cineSpace"></div>
 
-    <p class="lead focusable">Hi Brent! You said you want to grow MTS on two sides — <b>incubate shows across new verticals</b>, and <b>build an artifact people can actually use</b>. I think they're one system. Read on the left; the graph lives on the right. The highlighted words are live — click one to drop it in.</p>
+    <div class="lead focusable">
+      <p>Hi Brent! You said you want to grow MTS on two sides:</p>
+      <ul class="intro-list">
+        <li>Media growth: incubate shows across new verticals, generating raw materials</li>
+        <li>Product growth: build an artifact people can use the media materials with</li>
+      </ul>
+      <p>I think these goals are interconnected, and there is one concrete product that brings the two goals together. I’ll elaborate below.</p>
+    </div>
 
-    <section class="section"><div class="focusable">
-      <p class="tag"><span class="n">00</span>THE PREMISE</p><div class="hr"></div>
-      <h2>A memory problem, not a coverage problem</h2>
-      <p>Reading the coverage &amp; critic articles, most feedback treats MTS as a distribution problem: reach, speed, virality. Coming from cognitive science and content distribution, I think that's a misdiagnosis. MTS relies on X, which already delivers information faster than any show — but X, by design, doesn't prioritise consolidation, so it never converts into understanding you keep.</p>
-      <div class="callout"><p>Sensemaking, while MTS is on X, is a <strong>salience</strong> problem — not a distribution one.</p></div>
+    <section class="section" id="scene-premise" data-scene="premise"><div class="focusable">
+      <p class="tag">THE PREMISE</p>
+      <h2>The premise: it's a memory problem, not a coverage problem</h2>
+      <p>Upon reading some news coverage &amp; critic articles, I realized that most feedback treats MTS as a distribution problem: reach, speed, and virality.</p>
+      <p>Coming from cognitive science and content distribution, I think this is a misdiagnosis.</p>
+      <p>MTS relies on X which already delivers the information faster than any show.</p>
+      <p>X, by its product design, does not prioritise consolidation, so information does not convert into understanding you keep.</p>
+      <div class="callout"><p>Thus sensemaking (whilst MTS is using X) is more of a salience problem, less a distribution one.</p></div>
     </div></section>
 
-    <section class="section"><div class="focusable">
-      <p class="tag"><span class="n">01</span>MEDIA GROWTH</p><div class="hr"></div>
-      <h2>Two verticals worth owning</h2>
-      <p>Before owning AI, crypto, or geopolitics, you'd prioritize 1–2 realms. I looked for real-time firehoses people are emotionally invested in and can't parse alone. Two stand out — and they're live keywords, so drop them into the graph:</p>
-      <h3><span class="num">01.</span> <span class="kw" data-kw="Neurotech" data-cat="neuro">Neurotech<span class="kwtip">click me to add me as a node →</span></span></h3>
-      <p>Where AI was three years ago — accelerating, emotionally charged, barely covered by anyone who can read the science well enough to separate breakthrough from hype. I'm a neuro-nerd, but that's not why I pitch it; it's why MTS could own the vertical before it's contested.</p>
+    <section class="section" id="scene-media" data-scene="media"><div class="focusable">
+      <p class="tag">MEDIA GROWTH</p>
+      <h2>First, Media growth</h2>
+      <p>Before you own coverage on AI, crypto, geopolitics etc., you’d have to prioritize 1-2 realms.</p>
+      <p>I did a quick research on real-time firehoses people are emotionally invested in and can't parse alone, here are the two.</p>
+      <h3><span class="kw" data-kw="Neurotech" data-cat="neuro">Neurotech<span class="kwtip">click me to add me as a node →</span></span></h3>
+      <p>The AI market 3 years ago was accelerating fast, emotionally charged, and almost no one was covering it.</p>
+      <p>Brain-computer interfaces, neural wearables, the fight over neural-data rights and "cognitive liberty."</p>
+      <p>can actually read the science well enough to separate breakthrough from hype.</p>
+      <p>I’m a neuro-nerd, but that’s not the reason why I pitch this. But because I am one, I think MTS should own the vertical before it’s contested.</p>
       <ul class="spec">
-        <li><b>Format:</b> Weekly anchor + live coverage on launch / funding / regulation days</li>
-        <li><b>Book:</b> Neuralink / Merge / Precision founders, neuroethicists, FDA-watchers, skeptics — academics who'll call out the BS</li>
-        <li><b>Firehose?</b> Yes, and accelerating, with a built-in ethics fault line</li>
+        <li><b>Format:</b> Weekly anchor show + live coverage on launch/funding/regulation days</li>
+        <li><b>Book:</b> Neuralink / Merge / Precision founders, neuroethicists, the FDA-watchers, the skeptics. Don’t shy away from hosting academics, as they will call out the BS.</li>
+        <li><b>Firehose?</b> Yes, and accelerating, with a built-in ethics fault line that drives debate</li>
       </ul>
-      <div class="why"><p><b>On credibility:</b> this should counter MTS's current tech panel — critique in real time, which most channels are scared to do.</p></div>
-      <h3><span class="num">02.</span> <span class="kw" data-kw="Prediction markets" data-cat="market">Predictions<span class="kwtip">click me to add me as a node →</span></span></h3>
-      <p>Most channels compete with prediction markets; MTS should interrogate them. Why is this market priced this way? What does the crowd know that the headlines don't? Your audience already trusts a Polymarket price over a pundit — so make the market the protagonist and add the reasoning behind the move.</p>
+      <div class="why"><p>Importantly, in terms of credibility, this segment should counter MTS’ current tech panel. It should emphasize critique and calling out the BS in real time. Most media distribution channels are scared to do so.</p></div>
+      <h3><span class="kw" data-kw="Prediction markets" data-cat="market">Predictions<span class="kwtip">click me to add me as a node →</span></span></h3>
+      <p>Most distribution channels compete with prediction markets, but I think MTS should interrogate them. The show would ask questions like: Why is this market priced this way? What does the crowd know that the headlines don’t? Where is the crowd wrong, and what bias is baked into the number? This is because your audience already trusts a Polymarket price over a pundit, so make the market the protagonist and add the reasoning behind the move.</p>
       <ul class="spec">
         <li><b>Format:</b> Daily/rapid segment tied to live Kalshi &amp; Polymarket movement</li>
-        <li><b>Book:</b> The traders moving the line, the analysts, the investors</li>
-        <li><b>Firehose?</b> Yes — markets move continuously and are real-time friendly</li>
+        <li><b>Book:</b> The traders moving the line, the analysts, and investors</li>
+        <li><b>Firehose?</b> Yes, markets move continuously and are real-time friendly</li>
       </ul>
     </div></section>
 
-    <section class="section"><div class="focusable">
-      <p class="tag"><span class="n">02</span>PRODUCT GROWTH</p><div class="hr"></div>
-      <h2>A Bloomberg for meaning, not just data</h2>
-      <p>When you asked which company I think is cool, I named <a href="#">Flora</a>. When I asked what product growth looks like, you described a Bloomberg-esque tool that lets people build meaning from what they gather. So borrow Flora's node-canvas and point it at news: every story becomes a node, and the connections are the product.</p>
-      <p><strong>Why?</strong> Memory consolidates through connection — the act of linking two things is what retains them. That makes a node-graph the right cognitive architecture for sensemaking. Flora never made that argument; it's time distribution does.</p>
-      <p><strong>It also solves the empty-canvas trap.</strong> The show does the first pass — hosts publish each day's stories with connections drawn. The user forks it, extends the threads they care about, and builds a view over time, with a light AI layer suggesting links. Try more live keywords: <span class="kw" data-kw="Robotics" data-cat="ai">Robotics<span class="kwtip">click me to add me as a node →</span></span>, <span class="kw" data-kw="Stablecoins" data-cat="market">Stablecoins<span class="kwtip">click me to add me as a node →</span></span>, <span class="kw" data-kw="Fusion" data-cat="macro">Fusion<span class="kwtip">click me to add me as a node →</span></span>.</p>
-      <div class="callout"><p>The graph on the right is <strong>EP 83 as a graph</strong> — the thing you keep after the noise resolves. Hover a node, drag it, click any two to link. Then <strong>hover the edge</strong>: the connection carries the update. Open <strong>Follow the thread</strong> to turn that relationship into a structured story.</p></div>
+    <section class="section" id="scene-product" data-scene="product"><div class="focusable">
+      <p class="tag">PRODUCT GROWTH</p>
+      <h2>Second, a Product that takes it from there</h2>
+      <p>When you asked which company I think is cool, I name-dropped Flora.</p>
+      <p>And when I asked what growth looks like from the product side, you described a Bloomberg-esque product that has people build meaning from the information they got.</p>
+      <p>In order to build a product that lets people retain the information from shows, I would borrow the shape from Flora’s node-canvas and point it at news instead of images. Every story becomes a node.</p>
+      <div class="callout pipeline-trigger" id="pipelineTrigger"><p>show airs → stories become nodes → connections drawn → a graph you keep</p></div>
+      <p><strong>Why?</strong> Memory consolidates through connection, so the act of linking two pieces of information retains them, which makes it great cognitive architecture for sensemaking. Flora never made that argument, and it’s time distribution does it.</p>
+      <p><strong>And it solves the empty-canvas trap.</strong> Most people won’t build a graph from scratch, so <strong>the show does the first pass.</strong> Hosts and producers publish each day’s stories with the connections already drawn. The user will then fork it, extend the threads they care about, and build a view over time with a light AI layer suggesting links (on-canvas assistance). This will act as a custom catalog for the information overload coming from an always-on stream.</p>
     </div></section>
 
-    <section class="section"><div class="focusable">
-      <p class="tag"><span class="n">03</span>WHY ME</p><div class="hr"></div>
-      <h2>Where I'd plug in</h2>
-      <p>The seam between producing shows and building the product — producer + engineer. Shows generate the graph; the graph makes the show durable and personal. What you cover determines what the product can connect; how people use the product tells you what to cover next.</p>
+    <section class="section" id="scene-throughline" data-scene="throughline"><div class="focusable">
+      <p class="tag">THE THROUGH-LINE</p>
+      <h2>The through-line: the two sides are one pipeline</h2>
+      <p>This product will generate the following pipeline: shows generate the graph → graph makes show durable and personal. For MTS, what you cover determines what the product can connect, and how people use the product tells you what to cover next.</p>
+    </div></section>
+
+    <section class="section" id="scene-whyme" data-scene="whyme"><div class="focusable">
+      <p class="tag">WHY ME</p>
+      <h2>Why me?</h2>
+      <p>I’ll build the seam between producing shows and building the product (producer + engineer).</p>
       <ul class="proof">
-        <li><b>Brain-to-Film</b> — EEG signal → real-time scored film; built the pipeline in Python + benchmarked 4 gen-video models</li>
-        <li><b>Paramount</b> — shipped an AI agent that cut research 65%, adopted across distribution</li>
-        <li><b>NTT</b> — product definition 0→1 for a generative-AI app</li>
+        <li><b>Brain-to-Film:</b> EEG signal → real-time scored film; built the pipeline in Python + benchmarked 4 gen-video models</li>
+        <li><b>Paramount:</b> shipped an AI agent that cut research 65%, adopted across distribution</li>
+        <li><b>NTT:</b> product definition 0→1 for a generative-AI app</li>
       </ul>
-      <p><a href="#">Resume</a> &nbsp;·&nbsp; <a href="#">Portfolio</a></p>
-      <p>Happy to go deeper whenever. If useful, I'll build a working slice of the canvas so you can click it — this is a start.</p>
-      <p class="foot">Chaeyeon Kim · a note for MTS, not a formal proposal — just where I'd start. The fun part is pressure-testing it with you.</p>
+      <p><a href="https://drive.google.com/file/d/1W8CQBVV4wU7ES0dNgNDVFvMx97yjo0pW/view?usp=sharing" target="_blank" rel="noopener noreferrer">Resume</a> | <a href="http://chaeyeonkim.me/" target="_blank" rel="noopener noreferrer">Portfolio</a></p>
+      <p>Happy to go deeper on any of this whenever. If useful, I'll build a working slice of the canvas so you can click it.</p>
     </div></section>
   </main>
 
@@ -361,7 +495,13 @@
   const hero=document.getElementById('hero'), pHead=document.getElementById('pHead'), pFoot=document.getElementById('pFoot'), assistant=document.getElementById('assistant');
   const divider=document.getElementById('divider'), reopen=document.getElementById('reopen'), aPip=document.getElementById('aPip');
   const cineSpace=document.getElementById('cineSpace');
+  const statusMode=document.getElementById('statusMode'), statusLive=document.getElementById('statusLive');
+  const memoryReadout=document.getElementById('memoryReadout'), sceneWhisper=document.getElementById('sceneWhisper');
+  const pipelineTrigger=document.getElementById('pipelineTrigger'), throughlineSection=document.getElementById('scene-throughline');
+  const mediaSection=document.getElementById('scene-media'), productSection=document.getElementById('scene-product'), premiseSection=document.getElementById('scene-premise'), whymeSection=document.getElementById('scene-whyme');
   const edgeCard=document.getElementById('edgeCard'), edgeClose=document.getElementById('edgeClose'), followThread=document.getElementById('followThread');
+  const edgePotential=document.getElementById('edgePotential'), momentumPanel=document.getElementById('momentumPanel');
+  const momentumScore=document.getElementById('momentumScore'), momentumMeter=document.getElementById('momentumMeter'), momentumDelta=document.getElementById('momentumDelta'), momentumStats=document.getElementById('momentumStats'), momentumHeadlines=document.getElementById('momentumHeadlines');
   const edgeStatus=document.getElementById('edgeStatus'), edgeDate=document.getElementById('edgeDate'), edgePair=document.getElementById('edgePair');
   const edgeHeadline=document.getElementById('edgeHeadline'), edgeSummary=document.getElementById('edgeSummary'), edgeWhy=document.getElementById('edgeWhy'), edgeSource=document.getElementById('edgeSource');
   const threadView=document.getElementById('threadView'), threadBack=document.getElementById('threadBack'), panelModeLabel=document.getElementById('panelModeLabel');
@@ -380,16 +520,42 @@
     {label:"Machine Age Fund",cat:"market",tip:"<b>Jen Kha (a16z), EP 83.</b> AI-infrastructure investing and venture strategy."},
     {label:"AI in healthcare",cat:"neuro",tip:"<b>Julie Yoo (a16z), EP 83.</b> AI in healthcare, health-tech investing, consumer access."},
     {label:"Housing · urbanism",cat:"macro",tip:"<b>Ben Southwood, EP 83.</b> Works in Progress editor — building, cities, growth policy."},
+    {label:"Robotics",cat:"ai",tip:"<b>Robotics.</b> A live cross-vertical node for testing how MTS surfaces relationships between stories."},
   ];
   const cats={ai:'#5FA8C4',neuro:'#8FB8FF',macro:'#E8935B',market:'#B08FE8'};
-  const settled=[[.24,.20],[.74,.30],[.30,.52],[.78,.62],[.26,.80],[.66,.86]];
+  const settled=[[.24,.20],[.74,.30],[.30,.52],[.78,.62],[.26,.80],[.66,.86],[.56,.72]];
+  const now0=performance.now();
   const pts=base.map((n,i)=>({...n,
     sx:0.1+Math.random()*0.8, sy:0.12+Math.random()*0.76,
     lx:settled[i][0], ly:settled[i][1],
-    px:0,py:0,tx:0,ty:0,rHit:20,dragged:false}));
+    px:0,py:0,tx:0,ty:0,rHit:20,dragged:false,bornAt:now0-(i*180),retainedAt:0}));
   let edges=[[0,3],[1,2]];
   let dragging=-1,selected=-1,hover=-1,dragMoved=false,dx0=0,dy0=0;
   let edgeHover=-1,edgePinned=-1,edgeHideTimer=0,threadEdge=-1;
+  let activeScene='intro', pipelineStrength=0, recombineStrength=0, ghostStrength=0;
+  let ghostLabel='',ghostCat='ai',lastStatus='',renderPts=[];
+  const pipelineLabels=['SHOW AIRS','STORIES BECOME NODES','CONNECTIONS DRAWN','A GRAPH YOU KEEP'];
+  const recombineSlots=[[.62,.18],[.82,.22],[.68,.36],[.87,.40],[.61,.55],[.81,.59],[.68,.72],[.87,.76],[.61,.87],[.81,.88]];
+  const pastCopy=[document.querySelector('.lead'),premiseSection,mediaSection,productSection].filter(Boolean);
+  pastCopy.forEach(el=>el.classList.add('merge-past'));
+
+  function isConnected(i){return edges.some(e=>e[0]===i||e[1]===i);}
+  function retainedCount(){let n=0;for(let i=0;i<pts.length;i++)if(isConnected(i))n++;return n;}
+  function updateMemoryReadout(){
+    if(!memoryReadout)return;
+    const kept=retainedCount(),drift=Math.max(0,pts.length-kept);
+    memoryReadout.innerHTML=`<span class="kept">${kept} retained</span> · <span class="drift">${drift} drifting</span>`;
+  }
+  function flashRetained(i,j){
+    const a=pts[i],b=pts[j];if(!a||!b)return;
+    a.retainedAt=b.retainedAt=performance.now();
+    const cr=cv.getBoundingClientRect(),ra=renderPts[i]||{x:a.px,y:a.py},rb=renderPts[j]||{x:b.px,y:b.py};
+    const x=cr.left+(ra.x+rb.x)/2,y=cr.top+(ra.y+rb.y)/2-24;
+    const el=document.createElement('div');el.className='retained-toast';el.textContent='memory retained';
+    el.style.left=x+'px';el.style.top=y+'px';document.body.appendChild(el);
+    setTimeout(()=>el.remove(),1500);
+    updateMemoryReadout();
+  }
 
   // Prototype relationship intelligence. Curated examples are explicit about what
   // is a sourced update vs. an MTS synthesis; all other user-made edges fall back
@@ -397,6 +563,11 @@
   const edgeIntel={
     "Agent swarms||Physical AI · 4D sim":{
       status:"MTS SYNTHESIS",date:"EP 83 thread",fresh:true,
+      momentum:{score:74,posts:"6.8K",delta:"+92% / 7d",headlines:[
+        {meta:"2h · synthetic",title:"Physical-AI conversations spike around multi-agent robot training"},
+        {meta:"6h · synthetic",title:"World-model builders increasingly frame coordination as the next bottleneck"},
+        {meta:"1d · synthetic",title:"Simulation-first robotics threads converge on agent-to-agent policy learning"}
+      ]},
       headline:"World-models become more useful when agents can coordinate inside them",
       summary:"The 4D-simulation and agent-swarm conversations point at the same operating layer: many agents learning, negotiating and acting inside a model of the physical world before deployment.",
       why:"Simulation gives agents a world to reason inside; swarms turn that world into a coordination problem. Together they describe a training loop for physical AI, not two isolated AI stories.",
@@ -411,6 +582,11 @@
     },
     "Machine Age Fund||Semiconductor export controls":{
       status:"MTS SYNTHESIS",date:"EP 83 thread",fresh:true,
+      momentum:{score:69,posts:"4.2K",delta:"+58% / 7d",headlines:[
+        {meta:"3h · synthetic",title:"Chip-rule speculation pushes infrastructure bottlenecks back into investor feeds"},
+        {meta:"9h · synthetic",title:"Domestic semiconductor substitutes gain clout as policy uncertainty rises"},
+        {meta:"1d · synthetic",title:"AI-infrastructure investors map regulation directly onto scarcity trades"}
+      ]},
       headline:"Policy chokepoints are becoming an investment map for AI infrastructure",
       summary:"Export controls do more than constrain supply. They redirect demand, domestic substitution and capital toward the parts of the compute stack that suddenly become scarce or strategically important.",
       why:"The policy story and the fund story meet at bottlenecks: a regulatory constraint can create the next infrastructure thesis before it shows up as a company category.",
@@ -425,6 +601,11 @@
     },
     "Neurotech||Robotics":{
       status:"RECENT UPDATE",date:"Jul 17, 2026",fresh:true,
+      momentum:{score:86,posts:"14.2K",delta:"+231% / 7d",headlines:[
+        {meta:"48m · synthetic",title:"Brain-to-robot demos pull BCI into the humanoid-training conversation"},
+        {meta:"4h · synthetic",title:"Teleoperation teams debate neural intent as a higher-quality behavior signal"},
+        {meta:"11h · synthetic",title:"Neural-data rights emerge as embodied AI’s next governance fault line"}
+      ]},
       headline:"Brain-to-robot control is starting to look like a training-data layer for physical AI",
       summary:"At WAIC 2026, BrainCo demonstrated non-invasive EEG control of a robotic arm and explicitly framed brain-to-robot interaction as a way to address the robotics industry's shortage of high-quality training data.",
       why:"Neurotech stops being only an assistive interface. Human neural intent can become labeled control data for robots — linking BCI progress directly to how embodied AI learns.",
@@ -486,15 +667,20 @@
     else if(!isMobile){
       const s=reading?1:splitProgress();
       panelW=100-(leftFrac*100*s);
+      // At the through-line, the split recombines: the graph expands behind the prose,
+      // then returns to its normal reading width as the user continues.
+      if(reading&&panelMode==='split')panelW=panelW+(100-panelW)*recombineStrength;
     }
     document.documentElement.style.setProperty('--panelW',panelW+'vw');
 
     // On mobile, preserve the existing stacked reading mode but make the landing full-height.
     panel.classList.toggle('full',panelMode==='full'||(isMobile&&panelMode==='split'&&!cinematicDone));
     panel.classList.toggle('collapsed',panelMode==='collapsed');
-    panel.style.borderLeftColor=(panelMode==='split'&&!isMobile&&splitProgress()>0.02)?'var(--ink)':'transparent';
+    panel.style.zIndex=(!isMobile&&recombineStrength>.04&&panelMode==='split')?'20':'40';
+    const dividerVisible=(panelMode==='split'&&!isMobile&&splitProgress()>0.02&&recombineStrength<.12);
+    panel.style.borderLeftColor=dividerVisible?'var(--ink)':'transparent';
 
-    divider.classList.toggle('on', reading && panelMode==='split');
+    divider.classList.toggle('on', reading && panelMode==='split' && recombineStrength<.12);
     reopen.classList.toggle('on', reading && panelMode==='collapsed');
     queueResize();
   }
@@ -513,15 +699,83 @@
     mode=P>0.98?'reading':'cinematic';
     panel._spine=eA; panel._edgesA=settle;
   }
+
+  function proximity(el,band=.62){
+    if(!el)return 0;
+    const r=el.getBoundingClientRect(),cy=innerHeight*.52,mid=r.top+r.height/2;
+    const d=Math.abs(mid-cy)/(innerHeight*band);
+    return Math.max(0,Math.min(1,1-d));
+  }
+  function currentScene(){
+    if(P<.98)return 'intro';
+    const scenes=[['premise',premiseSection],['media',mediaSection],['product',productSection],['throughline',throughlineSection],['whyme',whymeSection]];
+    let best=['reading',0];
+    for(const item of scenes){const v=proximity(item[1],.78);if(v>best[1])best=[item[0],v];}
+    return best[0];
+  }
+  function updateScrollStory(){
+    activeScene=currentScene();
+    pipelineStrength=reduce?0:Math.pow(proximity(pipelineTrigger,.48),1.25);
+    recombineStrength=reduce?0:Math.pow(proximity(throughlineSection,.72),1.15);
+
+    // When the two interfaces recombine, already-read copy exits first so the
+    // node field and the current through-line never fight for the same pixels.
+    const mergeFade=Math.max(0,Math.min(1,(recombineStrength-.10)/.58));
+    pastCopy.forEach(el=>{
+      el.style.opacity=String(1-mergeFade);
+      el.style.filter=`blur(${(mergeFade*9).toFixed(2)}px)`;
+      el.style.transform=`translate3d(0,${(-18*mergeFade).toFixed(1)}px,0)`;
+      el.style.pointerEvents=mergeFade>.55?'none':'';
+    });
+    document.body.classList.toggle('recombined',recombineStrength>.28);
+
+    // Section-driven canvas behavior: the prose operates the graph.
+    ghostStrength=0;ghostLabel='';
+    if(activeScene==='media'){
+      const neuro=document.querySelector('.kw[data-kw="Neurotech"]');
+      const pred=document.querySelector('.kw[data-kw="Prediction markets"]');
+      const nv=proximity(neuro,.44),pv=proximity(pred,.44);
+      if(nv>=pv&&nv>.12){ghostLabel='Neurotech';ghostCat='neuro';ghostStrength=nv;}
+      else if(pv>.12){ghostLabel='Prediction markets';ghostCat='market';ghostStrength=pv;}
+    }
+
+    const states={
+      intro:['monitoring the situation','a note from Chaeyeon'],
+      reading:['information arriving','watch what survives'],
+      premise:['noise arriving','memory is the problem'],
+      media:['signal detected','a vertical comes into focus'],
+      product:['finding connections',pipelineStrength>.38?'the stories line up':'the graph starts remembering'],
+      throughline:['memory retained','media + product become one system'],
+      whyme:['system handoff','producer + engineer']
+    };
+    const state=states[activeScene]||states.reading;
+    const key=state.join('|');
+    if(key!==lastStatus){statusMode.textContent=state[0];statusLive.textContent=state[1];lastStatus=key;}
+
+    if(sceneWhisper){
+      let msg='';
+      if(pipelineStrength>.34)msg='the prose is reorganizing the graph';
+      else if(recombineStrength>.48)msg='the two sides were one system';
+      else if(ghostStrength>.35)msg=ghostLabel+' enters the field';
+      sceneWhisper.textContent=msg;sceneWhisper.classList.toggle('on',!!msg);
+    }
+  }
+
   const focusables=[...document.querySelectorAll('.focusable')];
-  function updateFocus(){const cy=innerHeight*0.5;
-    for(const el of focusables){const r=el.getBoundingClientRect();const mid=r.top+r.height/2;
-      const sharp=Math.abs(mid-cy)<innerHeight*0.44 && r.top<innerHeight*0.92 && r.bottom>innerHeight*0.08;
-      el.classList.toggle('sharp',sharp||reduce);}}
+  if(reduce){
+    focusables.forEach(el=>el.classList.add('sharp'));
+  }else{
+    const focusObserver=new IntersectionObserver(entries=>{
+      for(const entry of entries){
+        entry.target.classList.toggle('sharp',entry.isIntersecting);
+      }
+    },{root:null,threshold:0.18,rootMargin:'-10% 0px -22% 0px'});
+    focusables.forEach(el=>focusObserver.observe(el));
+  }
   let scrollRAF=0;
   function runScrollFrame(){
     scrollRAF=0;
-    computeP();applyCinematic();applyLayout();updateFocus();
+    computeP();applyCinematic();updateScrollStory();applyLayout();
   }
   function onScroll(){
     // Collapse bursts of wheel/trackpad events into one visual update per frame.
@@ -541,8 +795,8 @@
   document.getElementById('aClose').addEventListener('click',e=>{e.stopPropagation();assistantDismissed=true;assistant.classList.remove('on');assistant.classList.add('hidden');aPip.classList.add('on');});
   aPip.addEventListener('click',()=>{assistantDismissed=false;assistant.classList.remove('hidden');assistant.classList.add('on');aPip.classList.remove('on');});
 
-  function activeNow(){return (mode==='reading'||reduce)&&!threadView.classList.contains('on');}
-  function nodeAt(mx,my){for(let i=pts.length-1;i>=0;i--){const p=pts[i];if(Math.hypot(mx-p.px,my-p.py)<p.rHit)return i;}return -1;}
+  function activeNow(){return (mode==='reading'||reduce)&&!threadView.classList.contains('on')&&pipelineStrength<.46;}
+  function nodeAt(mx,my){for(let i=pts.length-1;i>=0;i--){const p=renderPts[i]||pts[i],x=p.x??p.px,y=p.y??p.py;if(Math.hypot(mx-x,my-y)<pts[i].rHit)return i;}return -1;}
   function pos(e){const r=cv.getBoundingClientRect();const t=e.touches?e.touches[0]:e;return{x:t.clientX-r.left,y:t.clientY-r.top,cx:t.clientX,cy:t.clientY};}
   function showTip(i,cx,cy){const p=pts[i];tip.innerHTML=p.tip;tip.classList.add('on');
     let tx=cx+14,ty=cy+14;const tw=tip.offsetWidth,th=tip.offsetHeight;
@@ -550,8 +804,18 @@
   function hideTip(){tip.classList.remove('on');}
 
   function pairKey(a,b){return [a,b].sort((x,y)=>x.localeCompare(y)).join('||');}
+  function syntheticMomentum(a,b){
+    const seed=[...`${a}|${b}`].reduce((n,ch)=>(n*31+ch.charCodeAt(0))>>>0,17);
+    const score=48+(seed%31), posts=((900+(seed%7600))/1000).toFixed(1)+'K', delta='+'+(28+(seed%143))+'% / 7d';
+    return{score,posts,delta,headlines:[
+      {meta:'2h · synthetic',title:`${a} and ${b} begin appearing in the same high-engagement threads`},
+      {meta:'8h · synthetic',title:`A shared company or constraint pulls ${a} closer to ${b}`},
+      {meta:'1d · synthetic',title:`Analysts start treating the ${a} × ${b} overlap as a distinct watch area`}
+    ]};
+  }
   function genericIntel(a,b){return{
     status:"CONNECTION HYPOTHESIS",date:"user-made edge",fresh:false,
+    momentum:syntheticMomentum(a,b),
     headline:`${a} may be converging with ${b}`,
     summary:"No verified recent update is attached to this prototype edge yet. In production, MTS would search current reporting, primary sources and show transcripts before claiming why this connection matters.",
     why:"The user has expressed a relationship. The next product action is evidence: support it, contradict it, or show what would make it become important.",
@@ -568,9 +832,9 @@
     const e=edges[index];if(!e)return null;const a=pts[e[0]],b=pts[e[1]];if(!a||!b)return null;
     return edgeIntel[pairKey(a.label,b.label)]||genericIntel(a.label,b.label);
   }
-  function quadPoint(p,q,t){const cx=(p.px+q.px)/2,cy=(p.py+q.py)/2-16,u=1-t;return{x:u*u*p.px+2*u*t*cx+t*t*q.px,y:u*u*p.py+2*u*t*cy+t*t*q.py};}
+  function quadPoint(p,q,t){const px=p.x??p.px,py=p.y??p.py,qx=q.x??q.px,qy=q.y??q.py;const cx=(px+qx)/2,cy=(py+qy)/2-16,u=1-t;return{x:u*u*px+2*u*t*cx+t*t*qx,y:u*u*py+2*u*t*cy+t*t*qy};}
   function edgeDistance(index,mx,my){
-    const e=edges[index],p=pts[e[0]],q=pts[e[1]];if(!p||!q)return{d:Infinity,t:.5};
+    const e=edges[index],p=renderPts[e?.[0]]||pts[e?.[0]],q=renderPts[e?.[1]]||pts[e?.[1]];if(!e||!p||!q)return{d:Infinity,t:.5};
     let best=Infinity,bestT=.5;
     for(let i=0;i<=24;i++){const t=i/24,z=quadPoint(p,q,t),d=Math.hypot(mx-z.x,my-z.y);if(d<best){best=d;bestT=t;}}
     return{d:best,t:bestT};
@@ -581,11 +845,13 @@
     clearEdgeHide();
     if(!force&&edgePinned>=0)return;
     edgeCard.classList.remove('on');edgeCard.setAttribute('aria-hidden','true');
+    momentumPanel.classList.remove('on');momentumPanel.setAttribute('aria-hidden','true');
+    edgePotential.classList.remove('on');edgePotential.setAttribute('aria-expanded','false');
     if(force){edgePinned=-1;edgeHover=-1;}
   }
   function scheduleEdgeHide(){clearEdgeHide();edgeHideTimer=setTimeout(()=>hideEdgeCard(false),120);}
   function positionEdgeCard(index,cx,cy){
-    const e=edges[index],p=pts[e[0]],q=pts[e[1]];if(!p||!q)return;
+    const e=edges[index],p=renderPts[e?.[0]]||pts[e?.[0]],q=renderPts[e?.[1]]||pts[e?.[1]];if(!e||!p||!q)return;
     const cr=cv.getBoundingClientRect(),mid=quadPoint(p,q,.5);
     let x=(cx??(cr.left+mid.x))+16,y=(cy??(cr.top+mid.y))+14;
     const w=edgeCard.offsetWidth||360,h=edgeCard.offsetHeight||260;
@@ -596,6 +862,17 @@
     y=Math.max(minTop,Math.min(innerHeight-h-8,y));
     edgeCard.style.left=x+'px';edgeCard.style.top=y+'px';
   }
+  function populateMomentum(intel,a,b,index){
+    const m=intel.momentum||syntheticMomentum(a,b);
+    momentumScore.textContent=m.score+'%';momentumMeter.style.width=m.score+'%';
+    momentumDelta.textContent=m.delta;momentumStats.textContent=`${m.posts} intersection posts · synthetic 7-day signal`;
+    momentumHeadlines.innerHTML='';
+    (m.headlines||[]).slice(0,3).forEach(h=>{const item=document.createElement('div');item.className='momentum-item';item.innerHTML=`<span>${h.meta||'synthetic'}</span>${h.title}`;momentumHeadlines.appendChild(item);});
+    edgePotential.textContent=`Potential · ${m.score}%`;edgePotential.dataset.edge=String(index);
+    edgePotential.setAttribute('aria-label',`Show synthetic momentum for ${a} and ${b}: ${m.score} percent`);
+    momentumPanel.classList.remove('on');momentumPanel.setAttribute('aria-hidden','true');
+    edgePotential.classList.remove('on');edgePotential.setAttribute('aria-expanded','false');
+  }
   function showEdgeCard(index,cx,cy,pin=false){
     const intel=getEdgeIntel(index),e=edges[index];if(!intel||!e)return;
     clearEdgeHide();if(pin)edgePinned=index;edgeHover=index;
@@ -603,6 +880,7 @@
     edgeStatus.textContent=intel.status;edgeDate.textContent=intel.date||'';
     edgePair.innerHTML=`<b>${a}</b> &nbsp;×&nbsp; <b>${b}</b>`;
     edgeHeadline.textContent=intel.headline;edgeSummary.textContent=intel.summary;edgeWhy.textContent=intel.why;
+    populateMomentum(intel,a,b,index);
     if(intel.href){edgeSource.textContent=(intel.source||'source')+' ↗';edgeSource.href=intel.href;edgeSource.classList.remove('hidden');}
     else{edgeSource.removeAttribute('href');edgeSource.classList.add('hidden');}
     followThread.dataset.edge=String(index);
@@ -633,6 +911,13 @@
   edgeCard.addEventListener('pointerleave',()=>{if(edgePinned<0)scheduleEdgeHide();});
   edgeClose.addEventListener('click',()=>hideEdgeCard(true));
   followThread.addEventListener('click',()=>{const i=Number(followThread.dataset.edge);if(Number.isInteger(i))openThread(i);});
+  edgePotential.addEventListener('click',()=>{
+    const open=!momentumPanel.classList.contains('on');
+    momentumPanel.classList.toggle('on',open);momentumPanel.setAttribute('aria-hidden',open?'false':'true');
+    edgePotential.classList.toggle('on',open);edgePotential.setAttribute('aria-expanded',open?'true':'false');
+    const i=Number(edgePotential.dataset.edge);
+    if(Number.isInteger(i))requestAnimationFrame(()=>positionEdgeCard(i));
+  });
   threadBack.addEventListener('click',closeThread);
 
   cv.addEventListener('pointerdown',e=>{
@@ -666,8 +951,8 @@
     else{
       const a=Math.min(selected,i),b=Math.max(selected,i);const ex=edges.findIndex(e=>e[0]===a&&e[1]===b);
       if(ex>=0){if(edgePinned===ex)hideEdgeCard(true);edges.splice(ex,1);edgePinned=-1;edgeHover=-1;}
-      else{edges.push([a,b]);const ni=edges.length-1;selected=-1;setTimeout(()=>showEdgeCard(ni,null,null,true),40);return;}
-      selected=-1;
+      else{edges.push([a,b]);const ni=edges.length-1;flashRetained(a,b);selected=-1;setTimeout(()=>showEdgeCard(ni,null,null,true),40);return;}
+      updateMemoryReadout();selected=-1;
     }
   }
 
@@ -689,58 +974,168 @@
     const destX=cr.left+cr.width*(0.35+Math.random()*0.3), destY=cr.top+cr.height*(0.3+Math.random()*0.4);
     requestAnimationFrame(()=>{fly.style.transition='transform .7s cubic-bezier(.4,0,.2,1),opacity .7s';fly.style.transform=`translate(${destX-r.left}px,${destY-r.top}px) scale(.9)`;fly.style.opacity='0.2';});
     setTimeout(()=>{fly.remove();const nx=(destX-cr.left)/cr.width,ny=(destY-cr.top)/cr.height;
-      pts.push({label,cat,tip:`<b>${label}</b> — dropped in from the text. In a real drop this pulls the day's stories onto it.`,sx:nx,sy:ny,lx:nx,ly:ny,tx:nx,ty:ny,px:nx*W,py:ny*H,rHit:20,dragged:true});
-      selected=pts.length-1;setTimeout(()=>{if(selected===pts.length-1)selected=-1;},1400);},700);
+      pts.push({label,cat,tip:`<b>${label}</b> — dropped in from the text. In a real drop this pulls the day's stories onto it.`,sx:nx,sy:ny,lx:nx,ly:ny,tx:nx,ty:ny,px:nx*W,py:ny*H,rHit:20,dragged:true,bornAt:performance.now(),retainedAt:0});
+      updateMemoryReadout();selected=pts.length-1;setTimeout(()=>{if(selected===pts.length-1)selected=-1;},1400);},700);
   }
   document.querySelectorAll('.kw').forEach(k=>{k.addEventListener('click',()=>{if(k.classList.contains('used'))return;addNode(k.dataset.kw,k.dataset.cat||'ai',k);k.classList.add('used');const t=k.querySelector('.kwtip');if(t)t.remove();});});
 
   function rr(a,b,w,h,r){ctx.beginPath();ctx.moveTo(a+r,b);ctx.arcTo(a+w,b,a+w,b+h,r);ctx.arcTo(a+w,b+h,a,b+h,r);ctx.arcTo(a,b+h,a,b,r);ctx.arcTo(a,b,a+w,b,r);ctx.closePath();}
+  function viewPoint(p,i){
+    let x=p.px,y=p.py;
+    // Memory is expressed through motion, not legibility: unconnected nodes drift,
+    // but their labels always remain crisp and readable.
+    if(!isConnected(i)&&pipelineStrength<.12&&P>.66){
+      const m=Math.max(0,Math.min(1,(P-.66)/.34)),t=performance.now()/1350;
+      x+=Math.sin(t+i*1.73)*3.2*m;y+=Math.cos(t*.83+i*1.21)*2.2*m;
+    }
+    if(pipelineStrength>.001){
+      const slot=i%4,row=Math.floor(i/4);
+      const px=W*(.14+slot*.24),py=H*(.48+(row-.45)*.12);
+      const e=ease(Math.min(1,pipelineStrength));
+      x=x+(px-x)*e;y=y+(py-y)*e;
+    }
+    // During the through-line, the canvas becomes the shared surface. Nodes move
+    // into the open right-hand field so the current prose remains untouched.
+    if(recombineStrength>.001){
+      const slot=recombineSlots[i%recombineSlots.length],band=Math.floor(i/recombineSlots.length);
+      const tx=W*Math.max(.56,slot[0]-band*.035),ty=H*Math.min(.88,slot[1]+band*.035);
+      const e=ease(Math.min(1,recombineStrength));
+      x=x+(tx-x)*e;y=y+(ty-y)*e;
+    }
+    return{x,y};
+  }
+  function nodeSize(p){
+    ctx.font='400 12px Helvetica, Arial, sans-serif';
+    return{w:ctx.measureText(p.label).width+30,h:26};
+  }
+  function buildRenderPositions(){
+    ctx.font='400 12px Helvetica, Arial, sans-serif';
+    renderPts=pts.map((p,i)=>{const v=viewPoint(p,i),m=nodeSize(p);p.rHit=Math.max(m.w,m.h)/2+5;return{x:v.x,y:v.y,w:m.w,h:m.h};});
+    const gap=10,topPad=Math.min(58,H*.14),bottomPad=Math.min(58,H*.14);
+    // Resolve actual label rectangles, not just node centers. This guarantees
+    // long labels like "Semiconductor export controls" cannot sit on top of neighbors.
+    for(let pass=0;pass<12;pass++){
+      for(let i=0;i<renderPts.length;i++){
+        for(let j=i+1;j<renderPts.length;j++){
+          const a=renderPts[i],b=renderPts[j],dx=b.x-a.x,dy=b.y-a.y;
+          const ox=(a.w+b.w)/2+gap-Math.abs(dx),oy=(a.h+b.h)/2+gap-Math.abs(dy);
+          if(ox<=0||oy<=0)continue;
+          const fixedA=i===dragging,fixedB=j===dragging;
+          if(ox<oy){
+            const sign=dx===0?(j%2?1:-1):Math.sign(dx),move=ox+0.6;
+            if(fixedA&&!fixedB)b.x+=sign*move;
+            else if(!fixedA&&fixedB)a.x-=sign*move;
+            else{a.x-=sign*move*.5;b.x+=sign*move*.5;}
+          }else{
+            const sign=dy===0?(j%2?1:-1):Math.sign(dy),move=oy+0.6;
+            if(fixedA&&!fixedB)b.y+=sign*move;
+            else if(!fixedA&&fixedB)a.y-=sign*move;
+            else{a.y-=sign*move*.5;b.y+=sign*move*.5;}
+          }
+        }
+      }
+      renderPts.forEach(r=>{
+        const minX=r.w/2+10,maxX=Math.max(minX,W-r.w/2-10),minY=r.h/2+topPad,maxY=Math.max(minY,H-r.h/2-bottomPad);
+        r.x=Math.max(minX,Math.min(maxX,r.x));r.y=Math.max(minY,Math.min(maxY,r.y));
+      });
+    }
+    return renderPts;
+  }
+  function drawPipelineGuides(){
+    const a=pipelineStrength;if(a<.03)return;
+    ctx.save();ctx.globalAlpha=.82*a;ctx.font='400 12px Helvetica, Arial, sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    const y=H*.28;
+    for(let i=0;i<4;i++){
+      const x=W*(.14+i*.24);
+      ctx.fillStyle='#8A8375';ctx.fillText(pipelineLabels[i],x,y);
+      if(i<3){ctx.strokeStyle='rgba(59,111,224,.48)';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(x+48,y);ctx.lineTo(W*(.14+(i+1)*.24)-48,y);ctx.stroke();
+        const ax=W*(.14+(i+1)*.24)-50;ctx.beginPath();ctx.moveTo(ax-5,y-4);ctx.lineTo(ax,y);ctx.lineTo(ax-5,y+4);ctx.stroke();}
+    }
+    ctx.restore();
+  }
+  function ghostPosition(w,h){
+    const candidates=[];
+    for(const ny of [.17,.29,.41,.53,.65,.77])for(const nx of [.18,.34,.50,.66,.82])candidates.push([nx,ny]);
+    let best={x:W*.5,y:H*.2,score:Infinity};
+    for(const [nx,ny] of candidates){
+      const x=Math.max(w/2+10,Math.min(W-w/2-10,W*nx)),y=Math.max(h/2+52,Math.min(H-h/2-52,H*ny));let score=0;
+      for(const r of renderPts){
+        const ox=(w+r.w)/2+12-Math.abs(x-r.x),oy=(h+r.h)/2+12-Math.abs(y-r.y);
+        if(ox>0&&oy>0)score+=ox*oy;
+      }
+      if(score<best.score)best={x,y,score};
+      if(score===0)return best;
+    }
+    return best;
+  }
+  function drawGhostNode(){
+    if(!ghostLabel||ghostStrength<.04||pipelineStrength>.2)return;
+    ctx.save();ctx.font='400 12px Helvetica, Arial, sans-serif';
+    const w=ctx.measureText(ghostLabel).width+34,h=28,pos=ghostPosition(w,h),x=pos.x,y=pos.y;
+    // Ghost nodes can be quieter, but never blurry.
+    ctx.globalAlpha=.48+.42*ghostStrength;
+    rr(x-w/2,y-h/2,w,h,8);ctx.fillStyle='#FBF9F3';ctx.fill();ctx.lineWidth=1.3;ctx.strokeStyle=cats[ghostCat]||'#C9C2B2';ctx.stroke();
+    ctx.beginPath();ctx.arc(x-w/2+13,y,3.5,0,Math.PI*2);ctx.fillStyle=cats[ghostCat]||'#8FB8FF';ctx.fill();
+    ctx.fillStyle='#1A1712';ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillText(ghostLabel,x-w/2+21,y+1);
+    ctx.restore();
+  }
   function tick(){
     // Resize before drawing, never in a competing rAF callback that can clear
-    // the canvas after a frame has already been painted. This prevents nodes
-    // from disappearing during continuous scrolling.
+    // the canvas after a frame has already been painted.
     const r=cv.getBoundingClientRect();
-    if(resizePending||Math.abs(r.width-W)>0.5||Math.abs(r.height-H)>0.5){
-      resize();resizePending=false;
+    if(resizePending||Math.abs(r.width-W)>0.5||Math.abs(r.height-H)>0.5){resize();resizePending=false;}
+    for(const n of pts){
+      const TX=(n.tx||n.sx)*W,TY=(n.ty||n.sy)*H;
+      if(!n.dragged){n.px+=(TX-n.px)*0.12;n.py+=(TY-n.py)*0.12;}
+      n.px=Math.max(34,Math.min(W-34,n.px));n.py=Math.max(50,Math.min(H-50,n.py));
     }
-    for(const n of pts){const TX=(n.tx||n.sx)*W,TY=(n.ty||n.sy)*H;if(!n.dragged){n.px+=(TX-n.px)*0.12;n.py+=(TY-n.py)*0.12;}}
-    if(mode==='reading'){for(let i=0;i<pts.length;i++){const p=pts[i];if(i===dragging)continue;
-      for(let j=0;j<pts.length;j++){if(i===j)continue;const q=pts[j];let dx=p.px-q.px,dy=p.py-q.py,d=Math.hypot(dx,dy)||1;if(d<70){p.px+=(dx/d)*(70-d)*0.02;p.py+=(dy/d)*(70-d)*0.02;}}
-      p.px=Math.max(70,Math.min(W-70,p.px));p.py=Math.max(60,Math.min(H-70,p.py));}}
     draw();requestAnimationFrame(tick);
   }
   function draw(){
     ctx.clearRect(0,0,W,H);
+    drawPipelineGuides();
+    buildRenderPositions();
     const spine=panel._spine||0, ea=panel._edgesA||0;
     if(spine>0.15 && ea<0.5){ctx.strokeStyle=`rgba(59,111,224,${0.2*spine})`;ctx.lineWidth=2;
-      ctx.beginPath();pts.forEach((p,i)=>{if(i===0)ctx.moveTo(p.px,p.py);else ctx.lineTo(p.px,p.py);});ctx.stroke();}
+      ctx.beginPath();renderPts.forEach((v,i)=>{if(i===0)ctx.moveTo(v.x,v.y);else ctx.lineTo(v.x,v.y);});ctx.stroke();}
     const activeEdge=edgePinned>=0?edgePinned:edgeHover;
-    if(ea>0.02){edges.forEach(([a,b],ei)=>{const p=pts[a],q=pts[b];if(!p||!q)return;
+    if(ea>0.02){edges.forEach(([a,b],ei)=>{const vp=renderPts[a],vq=renderPts[b];if(!vp||!vq)return;
       const isActive=ei===activeEdge,dim=activeEdge>=0&&!isActive;
-      ctx.strokeStyle=isActive?`rgba(59,111,224,${0.95*ea})`:`rgba(59,111,224,${(dim?0.10:0.42)*ea})`;
-      ctx.lineWidth=isActive?2.8:1.5;
-      ctx.beginPath();ctx.moveTo(p.px,p.py);const mx=(p.px+q.px)/2,my=(p.py+q.py)/2-16;ctx.quadraticCurveTo(mx,my,q.px,q.py);ctx.stroke();
+      const throughBoost=.38*recombineStrength;
+      ctx.strokeStyle=isActive?`rgba(59,111,224,${Math.min(1,(0.95+throughBoost)*ea)})`:`rgba(59,111,224,${Math.min(.86,((dim?0.10:0.42)+throughBoost)*ea)})`;
+      ctx.lineWidth=isActive?2.8:(1.5+recombineStrength*.7);
+      ctx.beginPath();ctx.moveTo(vp.x,vp.y);const mx=(vp.x+vq.x)/2,my=(vp.y+vq.y)/2-16;ctx.quadraticCurveTo(mx,my,vq.x,vq.y);ctx.stroke();
       const intel=getEdgeIntel(ei);
-      if(intel&&intel.fresh&&!dim){
-        const t=((performance.now()/3600)+(ei*.23))%1,z=quadPoint(p,q,t);
+      if(intel&&intel.fresh&&!dim&&pipelineStrength<.25){
+        const t=((performance.now()/3600)+(ei*.23))%1,u=1-t;
+        const z={x:u*u*vp.x+2*u*t*mx+t*t*vq.x,y:u*u*vp.y+2*u*t*my+t*t*vq.y};
         ctx.beginPath();ctx.arc(z.x,z.y,isActive?4:3,0,Math.PI*2);ctx.fillStyle=isActive?'#F6D64A':'rgba(246,214,74,.82)';ctx.fill();
       }
     });}
-    ctx.font='500 12px "JetBrains Mono", monospace';
-    pts.forEach((p,i)=>{const w=ctx.measureText(p.label).width+30,h=26;p.rHit=Math.max(w,h)/2+3;
-      const X=p.px-w/2,Y=p.py-h/2;const act=i===selected,hot=i===hover;
+    ctx.font='400 12px Helvetica, Arial, sans-serif';
+    const tnow=performance.now(),memoryPhase=Math.max(0,Math.min(1,(P-.66)/.34));
+    pts.forEach((p,i)=>{
+      const v=renderPts[i],w=v.w,h=v.h,X=v.x-w/2,Y=v.y-h/2;const act=i===selected,hot=i===hover,kept=isConnected(i);
+      const age=Math.max(0,tnow-(p.bornAt||0)),grace=Math.max(0,Math.min(1,1-age/8500));
+      // Disconnected information remains fully legible. Memory affects stability,
+      // not the user's ability to read the label.
+      const memoryAlpha=kept?1:Math.max(.82,.98-(memoryPhase*.14*(1-grace*.5)));
       const related=activeEdge<0||!edges[activeEdge]||edges[activeEdge][0]===i||edges[activeEdge][1]===i;
-      ctx.globalAlpha=related?1:.28;
-      if(act||((activeEdge>=0)&&related)){ctx.shadowColor='rgba(59,111,224,.28)';ctx.shadowBlur=act?14:8;}
+      const sceneAlpha=related?1:.38;
+      ctx.save();ctx.globalAlpha=memoryAlpha*sceneAlpha;
+      if(act||((activeEdge>=0)&&related)||kept&&recombineStrength>.55){ctx.shadowColor='rgba(59,111,224,.28)';ctx.shadowBlur=act?14:8;}
       rr(X,Y,w,h,7);ctx.fillStyle=act?'#E7EEFB':'#FBF9F3';ctx.fill();ctx.shadowBlur=0;
-      ctx.lineWidth=act?2:(activeEdge>=0&&related?1.8:1.2);ctx.strokeStyle=act?'#3B6FE0':(hot?'#8f9bb3':(activeEdge>=0&&related?'#3B6FE0':'#C9C2B2'));ctx.stroke();
-      ctx.beginPath();ctx.arc(X+13,p.py,3.4,0,7);ctx.fillStyle=cats[p.cat];ctx.fill();
-      ctx.fillStyle='#1A1712';ctx.textBaseline='middle';ctx.fillText(p.label,X+21,p.py+1);ctx.globalAlpha=1;});
+      ctx.lineWidth=act?2:(activeEdge>=0&&related?1.8:(kept?1.35:1.0));
+      ctx.strokeStyle=act?'#3B6FE0':(hot?'#8f9bb3':(activeEdge>=0&&related?'#3B6FE0':(kept?'#9DA8BF':'#C9C2B2')));ctx.stroke();
+      ctx.beginPath();ctx.arc(X+13,v.y,3.4,0,7);ctx.fillStyle=cats[p.cat];ctx.fill();
+      ctx.fillStyle='#1A1712';ctx.textBaseline='middle';ctx.fillText(p.label,X+21,v.y+1);ctx.restore();
+    });
+    drawGhostNode();
   }
 
   resize();applyLayout();resizePending=false;
   pts.forEach(p=>{p.px=p.sx*W;p.py=p.sy*H;p.tx=p.sx;p.ty=p.sy;});
-  runScrollFrame();requestAnimationFrame(tick);
+  updateMemoryReadout();runScrollFrame();requestAnimationFrame(tick);
 })();
 </script>
 </body>
